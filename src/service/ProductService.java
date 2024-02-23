@@ -12,5 +12,7 @@ public interface ProductService {
 
     void editProduct();
     void searchProductByName();
-    void deleteProductbyName();
+    void deleteProductByName();
+
+    void commitToDataSource();
 }

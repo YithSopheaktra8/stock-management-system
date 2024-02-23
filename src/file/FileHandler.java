@@ -13,22 +13,25 @@ import java.util.Scanner;
 
 public class FileHandler {
 
-    private static final String DATA_SOURCE = "data.txt";
+    public static final String DATA_SOURCE = "data.txt";
+    public static final String TRANSACTION_SOURCE = "transaction.txt";
+    public static Boolean isCommitted = false;
 
-    public void writeListToFile(List<Product> products){
-        try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_SOURCE))){
+    public void writeListToFile(List<Product> products,String source){
+        try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(source))){
             List<List<Product>> allProduct = new ArrayList<>();
             allProduct.add(products);
             objectOutputStream.writeObject(allProduct);
+            isCommitted = true;
             objectOutputStream.flush();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-    public List<Product> readListFile() {
+    public List<Product> readListFile(String source) {
         List<Product> productLists = new ArrayList<>();
-        try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(DATA_SOURCE))) {
+        try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(source))) {
             List<List<Product>> products = (List<List<Product>>) objectInputStream.readObject();
             for (List<Product> productList : products){
                 productLists.addAll(productList);

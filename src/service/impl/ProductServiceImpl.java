@@ -3,7 +3,7 @@ package service.impl;
 import file.FileHandler;
 import modal.Product;
 import service.ProductService;
-import utils.Helper;
+import utils.Commit;
 import utils.RenderMenu;
 import utils.TableFormatter;
 import utils.ValidateInput;
@@ -19,18 +19,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void writeObject(List<Product> productList) {
-        fileHandler.writeListToFile(productList);
+        fileHandler.writeListToFile(productList,FileHandler.TRANSACTION_SOURCE);
     }
 
     @Override
     public void showAllProduct() {
-        List<Product> products = fileHandler.readListFile();
+        List<Product> products = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
         TableFormatter.displayTable(products);
     }
     @Override
     public void editProduct() {
         Scanner scanner = new Scanner(System.in);
-        List<Product> products = fileHandler.readListFile();
+        List<Product> products = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
         System.out.print("Enter code to update : ");
         String code = scanner.nextLine();
         for (Product product : products){
@@ -67,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
                         String isSure = ValidateInput.validateInputString("Are you sure to update? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
                         if (isSure.equalsIgnoreCase("y"))
                             product.setName(product1.getName());
+
                     }
                     case "3" -> {
                         double newPrice = Double.parseDouble(ValidateInput.validateInputString("> Please Enter new Product price : ", "! Please Input Decimal only", "[0-9]+", scanner));
@@ -92,7 +93,8 @@ public class ProductServiceImpl implements ProductService {
 
             }
         }
-        fileHandler.writeListToFile(products);
+        fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
+        Commit.isTransactionUpdated = true;
     }
 
     @Override
@@ -101,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
         System.out.println("#".repeat(40));
         System.out.println("# Search product by name");
         String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
-        List<Product> productList = fileHandler.readListFile();
+        List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
         List<Product> searchList = new ArrayList<>();
         boolean isFound = false;
         for (Product product : productList){
@@ -119,12 +121,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProductbyName() {
+    public void deleteProductByName() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
         System.out.println("# Delete a product by name");
         String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
-        List<Product> productList = fileHandler.readListFile();
+        List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
         List<Product> listNotFound = new ArrayList<>();
         String isSure = "";
         boolean isFound = false;
@@ -141,7 +143,27 @@ public class ProductServiceImpl implements ProductService {
         }
         if(isFound && isSure.equalsIgnoreCase("y")){
             System.out.println("! Product has been deleted successfully !");
-            fileHandler.writeListToFile(listNotFound);
+            fileHandler.writeListToFile(listNotFound,FileHandler.TRANSACTION_SOURCE);
+            Commit.isTransactionUpdated = true;
+        }
+    }
+
+    @Override
+    public void commitToDataSource() {
+        Scanner scanner = new Scanner(System.in);
+        if(FileHandler.isCommitted){
+            System.out.println("#".repeat(40));
+            System.out.println("You have uncommitted transaction.");
+            String isSure = ValidateInput.validateInputString("> Do you want to save or lose data? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+            if(isSure.equalsIgnoreCase("y")){
+                List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
+                fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
+                FileHandler.isCommitted = false;
+                Commit.isTransactionUpdated = false;
+            }
+            System.out.println("No commit change");
+        }else {
+            System.out.println("> No commit change");
         }
     }
 }

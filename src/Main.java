@@ -1,6 +1,12 @@
 import controller.ProductController;
+import file.FileHandler;
 import modal.Product;
+import utils.Commit;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +14,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+        Commit.checkUncommittedChanges();
 
         ProductController productController = new ProductController();
         List<Product> products = new ArrayList<>(){{
@@ -18,11 +25,14 @@ public class Main {
 
 //        productController.writeDataToFile(products);
         productController.readDataFromFile();
-//        productController.searchProduct();
-//        productController.editAllProduct();
-        productController.deleteProduct();
-        productController.readDataFromFile();
+//        productController.commitToDataSource();
+////        productController.searchProduct();
+        productController.editAllProduct();
+//        productController.readDataFromFile();
 
 
+
+        Commit.isTransactionUpdated = true;
+        Commit.closeProgram();
     }
 }

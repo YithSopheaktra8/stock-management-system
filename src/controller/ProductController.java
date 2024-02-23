@@ -25,7 +25,10 @@ public class ProductController {
     }
 
     public void deleteProduct(){
-        productService.deleteProductbyName();
+        productService.deleteProductByName();
+    }
+    public void commitToDataSource(){
+        productService.commitToDataSource();
     }
 
 }
