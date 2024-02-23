@@ -23,7 +23,10 @@ public class Main {
             add(new Product("HANUMAN",2.0,20));
         }};
 
-        productController.readDataFromFile();
+
+        productController.clearData();
+//        productController.readDataFromFile();
+//        productController.addRandom();
 //        productController.restoreFile();
 //        productController.readDataFromFile();
         Commit.closeProgram();

@@ -38,4 +38,11 @@ public class ProductController {
         productService.restoreFile();
     }
 
+    public void addRandom(){
+        productService.addRandomRecord();
+    }
+    public void clearData(){
+        productService.clearDataInFile();
+    }
+
 }

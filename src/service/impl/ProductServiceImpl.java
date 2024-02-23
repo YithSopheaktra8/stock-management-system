@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -198,7 +199,7 @@ public class ProductServiceImpl implements ProductService {
                 System.out.println("List of file : ");
                 fileStream.forEach((path) -> System.out.println(STR."\{i.getAndIncrement()}. \{path.getFileName()}"));
             }
-            // Ask the user to input a number corresponding to a file
+            // Ask the user to input a number of the file
             Scanner scanner = new Scanner(System.in);
             System.out.print("> Enter the number of the Backup file to restore: ");
             int fileNumber = scanner.nextInt();
@@ -223,6 +224,32 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void addRandomRecord() {
+
+        Scanner scanner = new Scanner(System.in);
+        List<Product> products = new ArrayList<>();
+        int random = Integer.parseInt(ValidateInput.validateInputString("> Enter random amount : ","! Input must be number ","[0-9]+",scanner));
+        String isSure = ValidateInput.validateInputString(STR."Are you sure to add \{random} product ? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+        if(isSure.equalsIgnoreCase("y")){
+            for(int i=0; i<random; i++){
+                products.add(new Product("ABC",100.0,10));
+            }
+        }
+        Long start = System.nanoTime();
+        fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
+        Long end = System.nanoTime();
+        long elapsedTime = (end - start);
+        double seconds = (double) elapsedTime / 1_000_000_000;
+        long convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+        System.out.println(STR."# Write \{random} products spend : \{convert} s");
+    }
+    @Override
+    public void clearDataInFile() {
+        List<Product> emptyList = new ArrayList<>();
+        fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
     }
 
 }

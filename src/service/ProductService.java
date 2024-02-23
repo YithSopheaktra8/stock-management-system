@@ -13,5 +13,8 @@ public interface ProductService {
     void commitToDataSource();
     void backUpFile();
     void restoreFile();
+    void addRandomRecord();
+
+    void clearDataInFile();
 
 }
