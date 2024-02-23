@@ -24,4 +24,8 @@ public class ProductController {
         productService.searchProductByName();
     }
 
+    public void deleteProduct(){
+        productService.deleteProductbyName();
+    }
+
 }

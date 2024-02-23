@@ -18,9 +18,10 @@ public class Main {
 
 //        productController.writeDataToFile(products);
         productController.readDataFromFile();
-        productController.searchProduct();
+//        productController.searchProduct();
 //        productController.editAllProduct();
-//        productController.readDataFromFile();
+        productController.deleteProduct();
+        productController.readDataFromFile();
 
 
     }

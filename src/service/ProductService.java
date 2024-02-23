@@ -12,4 +12,5 @@ public interface ProductService {
 
     void editProduct();
     void searchProductByName();
+    void deleteProductbyName();
 }

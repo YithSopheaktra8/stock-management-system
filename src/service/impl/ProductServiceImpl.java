@@ -99,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
     public void searchProductByName() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
-        System.out.println("# Search a product by name");
+        System.out.println("# Search product by name");
         String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
         List<Product> productList = fileHandler.readListFile();
         List<Product> searchList = new ArrayList<>();
@@ -116,5 +116,32 @@ public class ProductServiceImpl implements ProductService {
             TableFormatter.displayTable(searchList);
         }
 
+    }
+
+    @Override
+    public void deleteProductbyName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("#".repeat(40));
+        System.out.println("# Delete a product by name");
+        String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
+        List<Product> productList = fileHandler.readListFile();
+        List<Product> listNotFound = new ArrayList<>();
+        String isSure = "";
+        boolean isFound = false;
+        for (Product product : productList){
+            if(!product.getName().equalsIgnoreCase(productName)){
+                listNotFound.add(product);
+            }else {
+                System.out.println("#".repeat(40));
+                System.out.println(STR."# Product detail of \{product.getCode()}");
+                TableFormatter.showOneProduct(product);
+                isSure = ValidateInput.validateInputString("Are you sure to delete? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+                isFound = true;
+            }
+        }
+        if(isFound && isSure.equalsIgnoreCase("y")){
+            System.out.println("! Product has been deleted successfully !");
+            fileHandler.writeListToFile(listNotFound);
+        }
     }
 }
