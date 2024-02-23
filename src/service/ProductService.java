@@ -11,6 +11,6 @@ public interface ProductService {
 
     void showAllProduct();
 
-
     void editProduct();
+    void searchProduct();
 }

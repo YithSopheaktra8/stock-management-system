@@ -21,7 +21,6 @@ public class FileHandler {
             allProduct.add(products);
             objectOutputStream.writeObject(allProduct);
             objectOutputStream.flush();
-            System.out.println("Write success");
         }catch (Exception e){
             System.out.println(e.getMessage());
         }

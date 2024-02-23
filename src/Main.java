@@ -11,11 +11,11 @@ public class Main {
 
         ProductController productController = new ProductController();
         List<Product> products = new ArrayList<>(){{
-            add(new Product("1001","COKE",2.5,30, LocalDate.now()));
-            add(new Product("1002","FANTA",2.0,20, LocalDate.now()));
+            add(new Product("COKE",2.5,30));
+            add(new Product("FANTA",2.0,20));
         }};
 
-        productController.writeDataToFile(products);
+//        productController.writeDataToFile(products);
         productController.readDataFromFile();
         productController.editAllProduct();
         productController.readDataFromFile();
