@@ -26,9 +26,10 @@ public class Main {
 
         productController.clearData();
 //        productController.readDataFromFile();
-//        productController.addRandom();
+        productController.addRandom();
 //        productController.restoreFile();
 //        productController.readDataFromFile();
+        productController.clearData();
         Commit.closeProgram();
     }
 }
