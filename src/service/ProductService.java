@@ -12,5 +12,6 @@ public interface ProductService {
     void deleteProductByName();
     void commitToDataSource();
     void backUpFile();
+    void restoreFile();
 
 }

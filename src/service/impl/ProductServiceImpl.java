@@ -8,8 +8,9 @@ import utils.RenderMenu;
 import utils.TableFormatter;
 import utils.ValidateInput;
 
-import java.io.IOException;
+
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -186,4 +189,40 @@ public class ProductServiceImpl implements ProductService {
             System.out.println(e.getMessage());
         }
     }
+    @Override
+    public  void restoreFile() {
+        AtomicInteger i = new AtomicInteger(1);
+        try{
+            Path backupFilePath = Paths.get("backup");
+            try(Stream<Path> fileStream = Files.list(backupFilePath)){
+                System.out.println("List of file : ");
+                fileStream.forEach((path) -> System.out.println(STR."\{i.getAndIncrement()}. \{path.getFileName()}"));
+            }
+            // Ask the user to input a number corresponding to a file
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("> Enter the number of the Backup file to restore: ");
+            int fileNumber = scanner.nextInt();
+
+            // Restore the selected file
+            try (Stream<Path> fileStream = Files.list(backupFilePath)) {
+                AtomicInteger currentFileNumber = new AtomicInteger(1);
+                Path selectedFilePath = fileStream
+                        .filter(path -> currentFileNumber.getAndIncrement() == fileNumber)
+                        .findFirst()
+                        .orElse(null);
+
+                if (selectedFilePath != null) {
+                    // Perform the restore by copying the selected file to the original data source file
+                    Files.copy(selectedFilePath, Paths.get(FileHandler.TRANSACTION_SOURCE), StandardCopyOption.REPLACE_EXISTING);
+                    Commit.isTransactionUpdated = true;
+                    System.out.println(STR."Restore completed from \{selectedFilePath.getFileName()} to \{FileHandler.TRANSACTION_SOURCE}");
+                } else {
+                    System.out.println("Invalid file number.");
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

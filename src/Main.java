@@ -23,13 +23,9 @@ public class Main {
             add(new Product("HANUMAN",2.0,20));
         }};
 
-//        productController.writeDataToFile(products);
-
-//        productController.commitToDataSource();
-//        productController.backUpFile();
-////        productController.searchProduct();
-//        productController.editAllProduct();
         productController.readDataFromFile();
+//        productController.restoreFile();
+//        productController.readDataFromFile();
         Commit.closeProgram();
     }
 }

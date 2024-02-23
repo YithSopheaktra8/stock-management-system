@@ -34,4 +34,8 @@ public class ProductController {
         productService.backUpFile();
     }
 
+    public void restoreFile(){
+        productService.restoreFile();
+    }
+
 }
