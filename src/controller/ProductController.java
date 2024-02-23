@@ -7,7 +7,7 @@ public class ProductController {
     private static final ProductServiceImpl productService = new ProductServiceImpl();
 
     public void readDataFromFile(){
-        productService.readListObjectFromFile();
+        productService.showAllProduct();
     }
 
     public void writeDataToFile(){

@@ -7,5 +7,11 @@ import java.util.List;
 public interface ProductService {
 
     void writeObjectToFile();
-    void readListObjectFromFile();
+    List<Product> readListObjectFromFile();
+
+    void showAllProduct();
+
+    Product updateAll(Product product);
+
+    void editProduct();
 }
