@@ -6,12 +6,11 @@ import java.util.List;
 
 public interface ProductService {
 
-    void writeObjectToFile();
-    List<Product> readListObjectFromFile();
+    void writeObject(List<Product> productList);
+    List<Product> readObject();
 
     void showAllProduct();
 
-    Product updateAll(Product product);
 
     void editProduct();
 }
