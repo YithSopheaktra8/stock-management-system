@@ -20,4 +20,8 @@ public class ProductController {
         productService.editProduct();
     }
 
+    public void searchProduct(){
+        productService.searchProductByName();
+    }
+
 }

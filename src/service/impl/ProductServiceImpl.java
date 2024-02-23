@@ -21,10 +21,6 @@ public class ProductServiceImpl implements ProductService {
     public void writeObject(List<Product> productList) {
         fileHandler.writeListToFile(productList);
     }
-    @Override
-    public List<Product> readObject() {
-        return fileHandler.readListFile();
-    }
 
     @Override
     public void showAllProduct() {
@@ -63,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
                         }
                     }
                     case "2" -> {
-                        String newName = ValidateInput.validateInputString("> Please Enter new Product name : ", "! Please Input alphabet only", "[a-zA-Z\\s]+", scanner);
+                        String newName = ValidateInput.validateInputString("> Please Enter new Product name : ", "! Please Input Alphabet and Number only", "[0-9a-zA-Z\\s]+", scanner);
                         Product product1 = new Product(product.getCode(),newName, product.getPrice(), product.getQuantity(), product.getImported());
                         System.out.println("#".repeat(40));
                         System.out.println(STR."# New Product detail of \{product.getCode()}");
@@ -100,7 +96,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void searchProduct() {
+    public void searchProductByName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("#".repeat(40));
+        System.out.println("# Search a product by name");
+        String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
+        List<Product> productList = fileHandler.readListFile();
+        List<Product> searchList = new ArrayList<>();
+        boolean isFound = false;
+        for (Product product : productList){
+            if(product.getName().toLowerCase().contains(productName.toLowerCase())){
+                searchList.add(product);
+                isFound = true;
+            }
+        }
+        if(!isFound){
+            System.out.println("! Product Not Found !");
+        }else {
+            TableFormatter.displayTable(searchList);
+        }
 
     }
 }

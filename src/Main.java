@@ -13,12 +13,14 @@ public class Main {
         List<Product> products = new ArrayList<>(){{
             add(new Product("COKE",2.5,30));
             add(new Product("FANTA",2.0,20));
+            add(new Product("FANTA12345",2.0,20));
         }};
 
 //        productController.writeDataToFile(products);
         productController.readDataFromFile();
-        productController.editAllProduct();
-        productController.readDataFromFile();
+        productController.searchProduct();
+//        productController.editAllProduct();
+//        productController.readDataFromFile();
 
 
     }
