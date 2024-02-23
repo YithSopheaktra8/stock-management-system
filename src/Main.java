@@ -19,16 +19,17 @@ public class Main {
         ProductController productController = new ProductController();
         List<Product> products = new ArrayList<>(){{
             add(new Product("COKE",2.5,30));
-            add(new Product("FANTA",2.0,20));
-            add(new Product("FANTA12345",2.0,20));
+            add(new Product("ANCHOR",2.0,20));
+            add(new Product("HANUMAN",2.0,20));
         }};
 
 //        productController.writeDataToFile(products);
-        productController.readDataFromFile();
+
 //        productController.commitToDataSource();
+//        productController.backUpFile();
 ////        productController.searchProduct();
 //        productController.editAllProduct();
-//        productController.readDataFromFile();
+        productController.readDataFromFile();
         Commit.closeProgram();
     }
 }

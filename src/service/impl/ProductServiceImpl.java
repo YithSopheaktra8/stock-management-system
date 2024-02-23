@@ -8,7 +8,13 @@ import utils.RenderMenu;
 import utils.TableFormatter;
 import utils.ValidateInput;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -164,6 +170,20 @@ public class ProductServiceImpl implements ProductService {
             System.out.println("No commit change");
         }else {
             System.out.println("> No commit change");
+        }
+    }
+
+    @Override
+    public void backUpFile() {
+        try{
+            Files.createDirectories(Paths.get(FileHandler.BACK_UP_SOURCE));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String timestamp = dateFormat.format(new Date());
+            String backupFileName = STR."\{FileHandler.BACK_UP_SOURCE}backup_\{timestamp}.txt";
+            Files.copy(Paths.get("data.txt"), Paths.get(backupFileName), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println(STR."Backup completed. backup filename : \{backupFileName}");
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

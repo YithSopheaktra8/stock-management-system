@@ -15,6 +15,7 @@ public class FileHandler {
 
     public static final String DATA_SOURCE = "data.txt";
     public static final String TRANSACTION_SOURCE = "transaction.txt";
+    public static final String BACK_UP_SOURCE = "backup/";
     public static Boolean isCommitted = false;
 
     public void writeListToFile(List<Product> products,String source){

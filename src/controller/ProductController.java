@@ -30,5 +30,8 @@ public class ProductController {
     public void commitToDataSource(){
         productService.commitToDataSource();
     }
+    public void backUpFile(){
+        productService.backUpFile();
+    }
 
 }
