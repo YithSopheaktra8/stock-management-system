@@ -14,8 +14,5 @@ public class Main {
                 .quantity(50)
                 .imported(LocalDate.now())
                 .build();
-
-//        ProductController.savedToFile(product);
-        ProductController.readFromFile();
     }
 }
