@@ -2,6 +2,7 @@ package utils;
 
 import modal.Product;
 import org.nocrala.tools.texttablefmt.BorderStyle;
+import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
@@ -12,18 +13,25 @@ import java.util.List;
 
 public class TableFormatter {
     public static void displayTable(List<Product> products) {
-        Table table = new Table(5, BorderStyle.CLASSIC_WIDE);
-        table.addCell("CODE");
-        table.addCell("NAME");
-        table.addCell("UNIT_PRICE");
-        table.addCell("QTY");
-        table.addCell("IMPORTED_AT");
+        CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
+        Table table = new Table(5, BorderStyle.UNICODE_DOUBLE_BOX_WIDE);
+        table.setColumnWidth(0,20,30);
+        table.setColumnWidth(1,20,30);
+        table.setColumnWidth(2,20,30);
+        table.setColumnWidth(3,20,30);
+        table.setColumnWidth(4,20,30);
+        table.addCell("CODE",cellCenter);
+        table.addCell("NAME",cellCenter);
+        table.addCell("UNIT_PRICE",cellCenter);
+        table.addCell("QTY",cellCenter);
+        table.addCell("IMPORTED_AT",cellCenter);
+
         for(Product e : products) {
-            table.addCell(e.getCode());
-            table.addCell(e.getName());
-            table.addCell(e.getPrice().toString());
-            table.addCell(e.getQuantity().toString());
-            table.addCell(e.getImported().toString());
+            table.addCell(e.getCode(),cellCenter);
+            table.addCell(e.getName(),cellCenter);
+            table.addCell(e.getPrice().toString(),cellCenter);
+            table.addCell(e.getQuantity().toString(),cellCenter);
+            table.addCell(e.getImported().toString(),cellCenter);
         }
         System.out.println(table.render());
     }

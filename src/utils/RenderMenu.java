@@ -9,4 +9,7 @@ public class RenderMenu {
         System.out.println("4. QTY");
         System.out.println("5. Back to Menu");
     }
+    public static void applicationMenu(){
+
+    }
 }

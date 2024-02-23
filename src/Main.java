@@ -27,12 +27,8 @@ public class Main {
         productController.readDataFromFile();
 //        productController.commitToDataSource();
 ////        productController.searchProduct();
-        productController.editAllProduct();
+//        productController.editAllProduct();
 //        productController.readDataFromFile();
-
-
-
-        Commit.isTransactionUpdated = true;
         Commit.closeProgram();
     }
 }
