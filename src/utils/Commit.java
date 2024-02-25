@@ -37,6 +37,7 @@ public class Commit {
                 boolean uncommittedChanges = Boolean.parseBoolean(content);
                 if (uncommittedChanges) {
                     FileHandler.isCommitted = true;
+                    isTransactionUpdated = true;
                     System.out.println("Alert: You have uncommitted changes from the previous session.");
                     productController.commitToDataSource();
                 }

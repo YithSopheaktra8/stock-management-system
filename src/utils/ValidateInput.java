@@ -21,7 +21,6 @@ public class ValidateInput {
                 System.out.println(error);
         }
     }
-    // validate String
     public static String validateInputString(String message, String error, String patternString, Scanner input ){
         while (true){
             System.out.print(message);
@@ -31,6 +30,18 @@ public class ValidateInput {
             if(matcher.matches()){
                 return choice;
             }
+            else
+                System.out.println(error);
+        }
+    }
+    public static Character validateInputChar(String message, String error, String stringPattern , Scanner input){
+        while (true){
+            System.out.print(message);
+            String choice = input.nextLine();
+            Pattern pattern = Pattern.compile(stringPattern);
+            Matcher matcher = pattern.matcher(choice);
+            if(matcher.matches())
+                return Character.toLowerCase(choice.charAt(0));
             else
                 System.out.println(error);
         }

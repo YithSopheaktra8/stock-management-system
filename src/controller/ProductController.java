@@ -8,16 +8,19 @@ import java.util.List;
 public class ProductController {
     private static final ProductServiceImpl productService = new ProductServiceImpl();
 
-    public void readDataFromFile(){
-        productService.showAllProduct();
+    public void readDataFromFile(List<Product> products){
+        productService.showAllProduct(products);
     }
 
-    public void writeDataToFile(List<Product> productList){
-        productService.writeObject(productList);
+    public void writeDataToFile(List<Product> products){
+        productService.writeObject(products);
+    }
+    public void readSingleProduct(List<Product> products){
+        productService.readSingleObject(products);
     }
 
-    public void editAllProduct(){
-        productService.editProduct();
+    public void editAllProduct(List<Product> products){
+        productService.editProduct(products);
     }
 
     public void searchProduct(){
@@ -40,6 +43,9 @@ public class ProductController {
 
     public void addRandom(){
         productService.addRandomRecord();
+    }
+    public List<Product> loadFromFile(){
+        return  productService.loadDataFromFile();
     }
     public void clearData(){
         productService.clearDataInFile();

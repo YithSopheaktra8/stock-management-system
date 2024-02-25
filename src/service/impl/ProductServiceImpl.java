@@ -28,19 +28,38 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public void writeObject(List<Product> productList) {
-        fileHandler.writeListToFile(productList,FileHandler.TRANSACTION_SOURCE);
+    public void writeObject(List<Product> products) {
+        Product product = RenderMenu.insertProduct();
+        products.add(product);
+        fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
     }
 
     @Override
-    public void showAllProduct() {
-        List<Product> products = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
+    public void readSingleObject(List<Product> productList) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("#".repeat(40));
+//        String productName = ValidateInput.validateInputString("Enter product code : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
+        System.out.print("Enter product code : ");
+        String productCode = scanner.nextLine();
+        boolean isFound = false;
+        for (Product product : productList){
+            if(product.getCode().toLowerCase().contains(productCode.toLowerCase())){
+                TableFormatter.showOneProduct(product);
+                isFound = true;
+            }
+        }
+        if(!isFound){
+            System.out.println("! Product Not Found !");
+        }
+    }
+
+    @Override
+    public void showAllProduct(List<Product> products) {
         TableFormatter.displayTable(products);
     }
     @Override
-    public void editProduct() {
+    public void editProduct(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
-        List<Product> products = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
         System.out.print("Enter code to update : ");
         String code = scanner.nextLine();
         for (Product product : products){
@@ -171,7 +190,6 @@ public class ProductServiceImpl implements ProductService {
                 FileHandler.isCommitted = false;
                 Commit.isTransactionUpdated = false;
             }
-            System.out.println("No commit change");
         }else {
             System.out.println("> No commit change");
         }
@@ -228,7 +246,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addRandomRecord() {
-
         Scanner scanner = new Scanner(System.in);
         List<Product> products = new ArrayList<>();
         int random = Integer.parseInt(ValidateInput.validateInputString("> Enter random amount : ","! Input must be number ","[0-9]+",scanner));
@@ -239,7 +256,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         Long start = System.nanoTime();
-        fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
+        fileHandler.writeListToFile(products,FileHandler.TEST_RANDOM_RECORD);
         Long end = System.nanoTime();
         long elapsedTime = (end - start);
         double seconds = (double) elapsedTime / 1_000_000_000;
@@ -252,4 +269,16 @@ public class ProductServiceImpl implements ProductService {
         fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
     }
 
+    @Override
+    public List<Product> loadDataFromFile() {
+        System.out.println("Loading from file...");
+        Long start = System.nanoTime();
+        List<Product> productList = fileHandler.readListFile(FileHandler.DATA_SOURCE);
+        Long end = System.nanoTime();
+        long elapsedTime = (end - start);
+        double seconds = (double) elapsedTime / 1_000_000_000;
+        long convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+        System.out.println(STR."# Write 10000000 products spend : \{convert} s");
+        return productList;
+    }
 }
