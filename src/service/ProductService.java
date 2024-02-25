@@ -9,8 +9,8 @@ public interface ProductService {
     void readSingleObject(List<Product> products);
     void showAllProduct(List<Product> products);
     void editProduct(List<Product> products);
-    void searchProductByName();
-    void deleteProductByName();
+    void searchProductByName(List<Product> products);
+    void deleteProductByName(List<Product> products);
     void commitToDataSource();
     void backUpFile();
     void restoreFile();

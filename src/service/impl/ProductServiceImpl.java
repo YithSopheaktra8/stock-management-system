@@ -14,10 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -127,12 +124,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void searchProductByName() {
+    public void searchProductByName(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
         System.out.println("# Search product by name");
         String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
-        List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
         List<Product> searchList = new ArrayList<>();
         boolean isFound = false;
         for (Product product : productList){
@@ -150,30 +146,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProductByName() {
+    public void deleteProductByName(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
         System.out.println("# Delete a product by name");
         String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
-        List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
-        List<Product> listNotFound = new ArrayList<>();
         String isSure = "";
         boolean isFound = false;
-        for (Product product : productList){
-            if(!product.getName().equalsIgnoreCase(productName)){
-                listNotFound.add(product);
-            }else {
+        Iterator<Product> iterator = productList.iterator();
+
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getName().equalsIgnoreCase(productName)) {
                 System.out.println("#".repeat(40));
                 System.out.println(STR."# Product detail of \{product.getCode()}");
                 TableFormatter.showOneProduct(product);
                 isSure = ValidateInput.validateInputString("Are you sure to delete? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+
+                if (isSure.equalsIgnoreCase("y")) {
+                    iterator.remove(); // Remove the product using the iterator
+                    fileHandler.writeListToFile(productList,FileHandler.TRANSACTION_SOURCE);
+                    System.out.println("! Product has been deleted successfully !");
+                    Commit.isTransactionUpdated = true;
+                }
                 isFound = true;
+                break; // Stop iterating once the product is found
             }
         }
-        if(isFound && isSure.equalsIgnoreCase("y")){
-            System.out.println("! Product has been deleted successfully !");
-            fileHandler.writeListToFile(listNotFound,FileHandler.TRANSACTION_SOURCE);
-            Commit.isTransactionUpdated = true;
+
+        if (!isFound) {
+            System.out.println("! Product not found.");
         }
     }
 
@@ -188,6 +190,8 @@ public class ProductServiceImpl implements ProductService {
                 List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
                 fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
                 FileHandler.isCommitted = false;
+                Commit.isTransactionUpdated = false;
+            }else {
                 Commit.isTransactionUpdated = false;
             }
         }else {

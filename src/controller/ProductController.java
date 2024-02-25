@@ -23,12 +23,12 @@ public class ProductController {
         productService.editProduct(products);
     }
 
-    public void searchProduct(){
-        productService.searchProductByName();
+    public void searchProduct(List<Product> products){
+        productService.searchProductByName(products);
     }
 
-    public void deleteProduct(){
-        productService.deleteProductByName();
+    public void deleteProduct(List<Product> products){
+        productService.deleteProductByName(products);
     }
     public void commitToDataSource(){
         productService.commitToDataSource();
