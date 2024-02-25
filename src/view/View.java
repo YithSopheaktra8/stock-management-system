@@ -13,7 +13,7 @@ public class View {
     public static final ProductController productController = new ProductController();
 
     public static void displayToConsole(){
-
+//        productController.clearData();
         Commit.checkUncommittedChanges();
         List<Product> products = productController.loadFromFile();
         Scanner scanner = new Scanner(System.in);

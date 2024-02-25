@@ -9,6 +9,8 @@ import utils.TableFormatter;
 import utils.ValidateInput;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -235,7 +237,6 @@ public class ProductServiceImpl implements ProductService {
                         .orElse(null);
 
                 if (selectedFilePath != null) {
-                    // Perform the restore by copying the selected file to the original data source file
                     Files.copy(selectedFilePath, Paths.get(FileHandler.TRANSACTION_SOURCE), StandardCopyOption.REPLACE_EXISTING);
                     Commit.isTransactionUpdated = true;
                     System.out.println(STR."Restore completed from \{selectedFilePath.getFileName()} to \{FileHandler.TRANSACTION_SOURCE}");
@@ -260,7 +261,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         Long start = System.nanoTime();
-        fileHandler.writeListToFile(products,FileHandler.TEST_RANDOM_RECORD);
+        fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
         Long end = System.nanoTime();
         long elapsedTime = (end - start);
         double seconds = (double) elapsedTime / 1_000_000_000;

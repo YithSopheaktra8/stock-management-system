@@ -15,10 +15,6 @@ public class Commit {
     public static void closeProgram() {
         // Save the status of committed or uncommitted changes to a file
         saveCommitStatus();
-
-        // Simulating closing the program...
-        System.out.println("Closing the program...");
-        // ... (your logic for closing the program)
     }
     public static void saveCommitStatus() {
         try {
