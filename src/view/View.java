@@ -14,7 +14,7 @@ public class View {
     public static final ProductController productController = new ProductController();
 
     public static void displayToConsole(){
-//        productController.clearData(FileHandler.DATA_SOURCE);
+//        productController.clearData(FileHandler.TRANSACTION_SOURCE);
         Commit.checkUncommittedChanges();
         List<Product> products = productController.loadFromFile();
         Scanner scanner = new Scanner(System.in);
@@ -38,6 +38,7 @@ public class View {
                 case 'k' -> productController.backUpFile();
                 case 't' -> productController.restoreFile(products);
                 case 'h' -> RenderMenu.helpMenu();
+                case 'a' -> productController.clearData(products);
                 case 'x' -> {
                     System.out.println("Good bye See you again!!");
                     Commit.closeProgram();

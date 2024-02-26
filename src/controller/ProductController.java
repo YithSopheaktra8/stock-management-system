@@ -47,8 +47,8 @@ public class ProductController {
     public List<Product> loadFromFile(){
         return  productService.loadDataFromFile();
     }
-    public void clearData(String filePath){
-        productService.clearDataInFile(filePath);
+    public void clearData(List<Product> products){
+        productService.clearDataInFile(products);
     }
 
 }

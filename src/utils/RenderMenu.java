@@ -47,11 +47,13 @@ public class RenderMenu {
         System.out.println(tableHelp.render());
     }
     public static void mainMenu(){
-        String menu = "Disp(l)ay | Rando(m) | (W)rite | (R)ead | (E)dit | (D)elete | (S)earch | Set r(o)w | (C)ommit | Bac(k) up | Res(t)ore | (H)elp | E(x)it";
+        String menu = "Disp(l)ay | Rando(m) | (W)rite | (R)ead | (E)dit | (D)elete | (S)earch ";
+        String menu1 = "| Set r(o)w | (C)ommit | Bac(k) up | Res(t)ore | (H)elp  | Cle(a)r | E(x)it";
         Table table = new Table(1, BorderStyle.UNICODE_BOX_DOUBLE_BORDER_WIDE, ShownBorders.SURROUND);
         CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
-        table.setColumnWidth(0,140,140);
+        table.setColumnWidth(0,100,100);
         table.addCell(menu,cellCenter);
+        table.addCell(menu1,cellCenter);
         System.out.println(table.render());
     }
 }

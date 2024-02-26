@@ -4,14 +4,11 @@ import file.FileHandler;
 import modal.Product;
 import org.nocrala.tools.texttablefmt.BorderStyle;
 import org.nocrala.tools.texttablefmt.CellStyle;
-import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 import service.ProductService;
 import utils.*;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -57,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
     public void showAllProduct(List<Product> products) {
 
         int currentPage = 1;
-        String choice = "";
+        String choice;
         int pageSize = 3;
         int totalRecord = products.size();
         int totalPages = (int) Math.ceil((double) totalRecord / pageSize);
@@ -92,12 +89,8 @@ public class ProductServiceImpl implements ProductService {
                         currentPage = Math.max(1, currentPage - 1);
                     }
                 }
-                case "l" ->{
-                    currentPage = totalPages;
-                }
-                case "f" ->{
-                    currentPage = 1;
-                }
+                case "l" -> currentPage = totalPages;
+                case "f" -> currentPage = 1;
                 case "g" ->{
                     System.out.print("Enter page number: ");
                     int desiredPage = scanner.nextInt();
@@ -204,7 +197,7 @@ public class ProductServiceImpl implements ProductService {
         System.out.println("#".repeat(40));
         System.out.println("# Delete a product by name");
         String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
-        String isSure = "";
+        String isSure;
         boolean isFound = false;
         Iterator<Product> iterator = productList.iterator();
 
@@ -244,8 +237,6 @@ public class ProductServiceImpl implements ProductService {
                 fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
                 FileHandler.isCommitted = false;
                 Commit.isTransactionUpdated = false;
-            }else {
-                Commit.isTransactionUpdated = false;
             }
         }else {
             System.out.println("> No commit change");
@@ -283,7 +274,7 @@ public class ProductServiceImpl implements ProductService {
             try (Stream<Path> fileStream = Files.list(backupFilePath)) {
                 AtomicInteger currentFileNumber = new AtomicInteger(1);
                 Path selectedFilePath = fileStream
-                        .filter(path -> currentFileNumber.getAndIncrement() == fileNumber)
+                        .filter(_ -> currentFileNumber.getAndIncrement() == fileNumber)
                         .findFirst()
                         .orElse(null);
 
@@ -318,14 +309,18 @@ public class ProductServiceImpl implements ProductService {
         fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
         Long end = System.nanoTime();
         long elapsedTime = (end - start);
+        long milliTime = elapsedTime / 1_000_000;
         double seconds = (double) elapsedTime / 1_000_000_000;
-        long convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+        double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
         System.out.println(STR."# Write \{random} products spend : \{convert} s");
     }
     @Override
-    public void clearDataInFile(String fileName) {
+    public void clearDataInFile(List<Product> products) {
         List<Product> emptyList = new ArrayList<>();
-        fileHandler.writeListToFile(emptyList,fileName);
+        fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
+        fileHandler.writeListToFile(emptyList,FileHandler.DATA_SOURCE);
+        products.clear();
+        Commit.isTransactionUpdated = true;
     }
 
     @Override
@@ -335,9 +330,10 @@ public class ProductServiceImpl implements ProductService {
         List<Product> productList = fileHandler.readListFile(FileHandler.DATA_SOURCE);
         Long end = System.nanoTime();
         long elapsedTime = (end - start);
+        long milliTime = elapsedTime / 1_000_000;
         double seconds = (double) elapsedTime / 1_000_000_000;
-        long convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."# Write 10000000 products spend : \{convert} s");
+        double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+        System.out.println(STR."# Write \{productList.size()} products spend : \{convert} s");
         return productList;
     }
 }
