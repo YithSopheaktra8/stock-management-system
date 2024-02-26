@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 public class ProductServiceImpl implements ProductService {
 
     private static final FileHandler fileHandler = new FileHandler();
+    public static int setRow = 0;
+    public static int pageSize = 3;
 
 
     @Override
@@ -55,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
 
         int currentPage = 1;
         String choice;
-        int pageSize = 3;
+
         int totalRecord = products.size();
         int totalPages = (int) Math.ceil((double) totalRecord / pageSize);
         do {
@@ -93,12 +95,18 @@ public class ProductServiceImpl implements ProductService {
                 case "f" -> currentPage = 1;
                 case "g" ->{
                     System.out.print("Enter page number: ");
-                    int desiredPage = scanner.nextInt();
-                    currentPage = Helper.goToSpecificPage(desiredPage, totalPages);
+                    setRow = scanner.nextInt();
+                    currentPage = Helper.goToSpecificPage(setRow, totalPages);
                     scanner.nextLine();
                 }
             }
         }while (!choice.equalsIgnoreCase("b"));
+    }
+    @Override
+    public void setRow() {
+        Scanner scanner = new Scanner(System.in);
+        ProductServiceImpl.setRow = ValidateInput.validateInputNumber("> Set row to display in table : ","! Row must be number !",scanner);
+        pageSize = ProductServiceImpl.setRow;
     }
     @Override
     public void editProduct(List<Product> products) {
@@ -338,4 +346,6 @@ public class ProductServiceImpl implements ProductService {
         System.out.println(STR."# Write \{productList.size()} products spend : \{convert} s");
         return productList;
     }
+
+
 }

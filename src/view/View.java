@@ -50,6 +50,7 @@ public class View {
                 case 't' -> productController.restoreFile(products);
                 case 'h' -> RenderMenu.helpMenu();
                 case 'a' -> productController.clearData(products);
+                case 'o' -> productController.setRow();
                 case 'x' -> {
                     System.out.println("Good bye See you again!!");
                     System.exit(0);

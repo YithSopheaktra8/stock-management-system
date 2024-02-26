@@ -17,5 +17,6 @@ public interface ProductService {
     void addRandomRecord(List<Product> products);
     void clearDataInFile(List<Product> products);
     List<Product> loadDataFromFile();
+    void setRow();
 
 }

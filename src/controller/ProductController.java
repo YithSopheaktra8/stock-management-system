@@ -50,5 +50,8 @@ public class ProductController {
     public void clearData(List<Product> products){
         productService.clearDataInFile(products);
     }
+    public void setRow(){
+        productService.setRow();
+    }
 
 }
