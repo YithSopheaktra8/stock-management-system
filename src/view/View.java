@@ -1,6 +1,7 @@
 package view;
 
 import controller.ProductController;
+import file.FileHandler;
 import modal.Product;
 import utils.Commit;
 import utils.RenderMenu;
@@ -13,7 +14,7 @@ public class View {
     public static final ProductController productController = new ProductController();
 
     public static void displayToConsole(){
-//        productController.clearData();
+//        productController.clearData(FileHandler.DATA_SOURCE);
         Commit.checkUncommittedChanges();
         List<Product> products = productController.loadFromFile();
         Scanner scanner = new Scanner(System.in);
@@ -27,7 +28,7 @@ public class View {
                     scanner);
             switch (ch){
                 case 'l' -> productController.readDataFromFile(products);
-                case 'm' -> productController.addRandom();
+                case 'm' -> productController.addRandom(products);
                 case 'w' -> productController.writeDataToFile(products);
                 case 'r' -> productController.readSingleProduct(products);
                 case 'd' -> productController.deleteProduct(products);
@@ -35,7 +36,7 @@ public class View {
                 case 's' -> productController.searchProduct(products);
                 case 'c' -> productController.commitToDataSource();
                 case 'k' -> productController.backUpFile();
-                case 't' -> productController.restoreFile();
+                case 't' -> productController.restoreFile(products);
                 case 'h' -> RenderMenu.helpMenu();
                 case 'x' -> {
                     System.out.println("Good bye See you again!!");

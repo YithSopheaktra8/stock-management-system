@@ -2,11 +2,12 @@ package service.impl;
 
 import file.FileHandler;
 import modal.Product;
+import org.nocrala.tools.texttablefmt.BorderStyle;
+import org.nocrala.tools.texttablefmt.CellStyle;
+import org.nocrala.tools.texttablefmt.ShownBorders;
+import org.nocrala.tools.texttablefmt.Table;
 import service.ProductService;
-import utils.Commit;
-import utils.RenderMenu;
-import utils.TableFormatter;
-import utils.ValidateInput;
+import utils.*;
 
 
 import java.io.BufferedReader;
@@ -54,7 +55,57 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void showAllProduct(List<Product> products) {
-        TableFormatter.displayTable(products);
+
+        int currentPage = 1;
+        String choice = "";
+        int pageSize = 3;
+        int totalRecord = products.size();
+        int totalPages = (int) Math.ceil((double) totalRecord / pageSize);
+        do {
+            currentPage = Math.max(1, Math.min(currentPage, totalPages));
+            TableFormatter.displayPagination(products,currentPage,pageSize);
+            Scanner scanner = new Scanner(System.in);
+            CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.right);
+            CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.left);
+            Table table = new Table(2, BorderStyle.DESIGN_PAPYRUS);
+            table.setColumnWidth(0,55,55);
+            table.setColumnWidth(1,55,55);
+            table.addCell(STR."Page : \{currentPage} of \{totalPages}",cellLeft);
+            table.addCell(STR."Total Record : \{totalRecord}",cellRight);
+            table.addCell("Page Navigation",cellLeft);
+            table.addCell("(F)irst  (P)revious  (G)oto  (N)ext  (L)ast",cellRight);
+            System.out.println(table.render());
+            System.out.print("> (B)ack or Navigate page : ");
+            choice = scanner.nextLine().toLowerCase();
+            switch (choice){
+                case "n" -> {
+                    if(currentPage == totalPages){
+                        currentPage = 1;
+                    }else {
+                        currentPage++;
+                    }
+                }
+                case "p" ->{
+                    if (currentPage == 1) {
+                        currentPage = totalPages;
+                    } else {
+                        currentPage = Math.max(1, currentPage - 1);
+                    }
+                }
+                case "l" ->{
+                    currentPage = totalPages;
+                }
+                case "f" ->{
+                    currentPage = 1;
+                }
+                case "g" ->{
+                    System.out.print("Enter page number: ");
+                    int desiredPage = scanner.nextInt();
+                    currentPage = Helper.goToSpecificPage(desiredPage, totalPages);
+                    scanner.nextLine();
+                }
+            }
+        }while (!choice.equalsIgnoreCase("b"));
     }
     @Override
     public void editProduct(List<Product> products) {
@@ -215,7 +266,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
     @Override
-    public  void restoreFile() {
+    public  void restoreFile(List<Product> productList) {
         AtomicInteger i = new AtomicInteger(1);
         try{
             Path backupFilePath = Paths.get("backup");
@@ -238,7 +289,11 @@ public class ProductServiceImpl implements ProductService {
 
                 if (selectedFilePath != null) {
                     Files.copy(selectedFilePath, Paths.get(FileHandler.TRANSACTION_SOURCE), StandardCopyOption.REPLACE_EXISTING);
+                    List<Product> products = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
+                    productList.clear();
+                    productList.addAll(products);
                     Commit.isTransactionUpdated = true;
+                    FileHandler.isCommitted = true;
                     System.out.println(STR."Restore completed from \{selectedFilePath.getFileName()} to \{FileHandler.TRANSACTION_SOURCE}");
                 } else {
                     System.out.println("Invalid file number.");
@@ -250,9 +305,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addRandomRecord() {
+    public void addRandomRecord(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
-        List<Product> products = new ArrayList<>();
         int random = Integer.parseInt(ValidateInput.validateInputString("> Enter random amount : ","! Input must be number ","[0-9]+",scanner));
         String isSure = ValidateInput.validateInputString(STR."Are you sure to add \{random} product ? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
         if(isSure.equalsIgnoreCase("y")){
@@ -269,9 +323,9 @@ public class ProductServiceImpl implements ProductService {
         System.out.println(STR."# Write \{random} products spend : \{convert} s");
     }
     @Override
-    public void clearDataInFile() {
+    public void clearDataInFile(String fileName) {
         List<Product> emptyList = new ArrayList<>();
-        fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
+        fileHandler.writeListToFile(emptyList,fileName);
     }
 
     @Override

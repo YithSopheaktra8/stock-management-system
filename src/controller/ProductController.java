@@ -37,18 +37,18 @@ public class ProductController {
         productService.backUpFile();
     }
 
-    public void restoreFile(){
-        productService.restoreFile();
+    public void restoreFile(List<Product> products){
+        productService.restoreFile(products);
     }
 
-    public void addRandom(){
-        productService.addRandomRecord();
+    public void addRandom(List<Product> products){
+        productService.addRandomRecord(products);
     }
     public List<Product> loadFromFile(){
         return  productService.loadDataFromFile();
     }
-    public void clearData(){
-        productService.clearDataInFile();
+    public void clearData(String filePath){
+        productService.clearDataInFile(filePath);
     }
 
 }

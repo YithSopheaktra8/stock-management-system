@@ -13,9 +13,9 @@ public interface ProductService {
     void deleteProductByName(List<Product> products);
     void commitToDataSource();
     void backUpFile();
-    void restoreFile();
-    void addRandomRecord();
-    void clearDataInFile();
+    void restoreFile(List<Product> products);
+    void addRandomRecord(List<Product> products);
+    void clearDataInFile(String filePath);
     List<Product> loadDataFromFile();
 
 }
