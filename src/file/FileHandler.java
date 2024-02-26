@@ -6,7 +6,6 @@ import utils.CheckCommit;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class FileHandler {
     public static final String DATA_SOURCE = "data.txt";

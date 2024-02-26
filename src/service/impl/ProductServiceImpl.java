@@ -37,9 +37,7 @@ public class ProductServiceImpl implements ProductService {
     public void readSingleObject(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
-//        String productName = ValidateInput.validateInputString("Enter product code : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
-        System.out.print("Enter product code : ");
-        String productCode = scanner.nextLine();
+        String productCode = ValidateInput.validateInputString("Enter product code (CSTAD- followed by numbers) : ","! Must be follow by instruction!","^CSTAD-\\d+$",scanner);
         boolean isFound = false;
         for (Product product : productList){
             if(product.getCode().toLowerCase().contains(productCode.toLowerCase())){
@@ -54,25 +52,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void showAllProduct(List<Product> products) {
-
         int currentPage = 1;
         String choice;
-
         int totalRecord = products.size();
         int totalPages = (int) Math.ceil((double) totalRecord / pageSize);
         do {
             currentPage = Math.max(1, Math.min(currentPage, totalPages));
             TableFormatter.displayPagination(products,currentPage,pageSize);
             Scanner scanner = new Scanner(System.in);
-            CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.right);
-            CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.left);
-            Table table = new Table(2, BorderStyle.DESIGN_PAPYRUS);
-            table.setColumnWidth(0,55,55);
-            table.setColumnWidth(1,55,55);
-            table.addCell(STR."Page : \{currentPage} of \{totalPages}",cellLeft);
-            table.addCell(STR."Total Record : \{totalRecord}",cellRight);
-            table.addCell("Page Navigation",cellLeft);
-            table.addCell("(F)irst  (P)revious  (G)oto  (N)ext  (L)ast",cellRight);
+            Table table = getTable(currentPage, totalPages, totalRecord);
             System.out.println(table.render());
             System.out.print("> (B)ack or Navigate page : ");
             choice = scanner.nextLine().toLowerCase();
@@ -95,13 +83,26 @@ public class ProductServiceImpl implements ProductService {
                 case "f" -> currentPage = 1;
                 case "g" ->{
                     System.out.print("Enter page number: ");
-                    setRow = scanner.nextInt();
-                    currentPage = Helper.goToSpecificPage(setRow, totalPages);
-                    scanner.nextLine();
+                    int toPage = ValidateInput.validateInputNumber("> Enter page number : ","! Page must be Number !",scanner);
+                    currentPage = Helper.goToSpecificPage(toPage, totalPages);
                 }
             }
         }while (!choice.equalsIgnoreCase("b"));
     }
+
+    private static Table getTable(int currentPage, int totalPages, int totalRecord) {
+        CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.right);
+        CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.left);
+        Table table = new Table(2, BorderStyle.DESIGN_PAPYRUS);
+        table.setColumnWidth(0,55,55);
+        table.setColumnWidth(1,55,55);
+        table.addCell(STR."Page : \{currentPage} of \{totalPages}",cellLeft);
+        table.addCell(STR."Total Record : \{totalRecord}",cellRight);
+        table.addCell("Page Navigation",cellLeft);
+        table.addCell("(F)irst  (P)revious  (G)oto  (N)ext  (L)ast",cellRight);
+        return table;
+    }
+
     @Override
     public void setRow() {
         Scanner scanner = new Scanner(System.in);
@@ -199,18 +200,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProductByName(List<Product> productList) {
+    public void deleteProductByCode(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
-        System.out.println("# Delete a product by name");
-        String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
+        System.out.println("# Delete a product");
+        String productCode = ValidateInput.validateInputString("Enter product code (CSTAD- followed by numbers) : ","! Must be follow by instruction!","^CSTAD-\\d+$",scanner);
         String isSure;
         boolean isFound = false;
         Iterator<Product> iterator = productList.iterator();
-
         while (iterator.hasNext()) {
             Product product = iterator.next();
-            if (product.getName().equalsIgnoreCase(productName)) {
+            if (product.getName().equalsIgnoreCase(productCode)) {
                 System.out.println("#".repeat(40));
                 System.out.println(STR."# Product detail of \{product.getCode()}");
                 TableFormatter.showOneProduct(product);
@@ -343,7 +343,7 @@ public class ProductServiceImpl implements ProductService {
         long milliTime = elapsedTime / 1_000_000;
         double seconds = (double) elapsedTime / 1_000_000_000;
         double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."# Write \{productList.size()} products spend : \{convert} s");
+        System.out.println(STR."# Load \{productList.size()} products spend : \{convert} s");
         return productList;
     }
 

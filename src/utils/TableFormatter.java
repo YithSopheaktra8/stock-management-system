@@ -7,18 +7,11 @@ import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
-import static utils.Helper.goToSpecificPage;
 
 public class TableFormatter {
     public static void displayPagination(List<Product> products,int currentPage, int pageSize) {
         CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
-        CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.right);
-        CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.left);
         Table table = new Table(5, BorderStyle.UNICODE_DOUBLE_BOX_WIDE);
         table.setColumnWidth(0, 20, 20);
         table.setColumnWidth(1, 20, 20);
@@ -72,11 +65,11 @@ public class TableFormatter {
     }
     public static void showOneProduct(Product e) {
         Table table = new Table(1, BorderStyle.UNICODE_BOX_DOUBLE_BORDER_WIDE, ShownBorders.SURROUND);
-            table.addCell("CODE" + " ".repeat(18) + ": " + e.getCode());
-            table.addCell("Name" + " ".repeat(18) + ": " + e.getName());
-            table.addCell("Unit Price" + " ".repeat(12) + ": " + e.getPrice());
-            table.addCell("Qty" + " ".repeat(19) + ": " + e.getQuantity());
-            table.addCell("Imported Date" + " ".repeat(9) + ": " + e.getImported());
+            table.addCell(STR."CODE\{" ".repeat(18)}: \{e.getCode()}");
+            table.addCell(STR."Name\{" ".repeat(18)}: \{e.getName()}");
+            table.addCell(STR."Unit Price\{" ".repeat(12)}: \{e.getPrice()}");
+            table.addCell(STR."Qty\{" ".repeat(19)}: \{e.getQuantity()}");
+            table.addCell(STR."Imported Date\{" ".repeat(9)}: \{e.getImported()}");
         System.out.println(table.render());
     }
 }

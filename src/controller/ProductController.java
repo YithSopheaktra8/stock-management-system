@@ -28,7 +28,7 @@ public class ProductController {
     }
 
     public void deleteProduct(List<Product> products){
-        productService.deleteProductByName(products);
+        productService.deleteProductByCode(products);
     }
     public void commitToDataSource(){
         productService.commitToDataSource();

@@ -15,7 +15,7 @@ public class CheckCommit {
             writer.write(String.valueOf(dataCommitted));
         } catch (IOException e) {
             // Handle the exception (e.g., write error)
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
     public static void loadCommitStatus() {
@@ -27,7 +27,7 @@ public class CheckCommit {
             }
         } catch (IOException e) {
             // Handle the exception (e.g., file not found, read error)
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

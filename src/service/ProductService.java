@@ -10,7 +10,7 @@ public interface ProductService {
     void showAllProduct(List<Product> products);
     void editProduct(List<Product> products);
     void searchProductByName(List<Product> products);
-    void deleteProductByName(List<Product> products);
+    void deleteProductByCode(List<Product> products);
     void commitToDataSource();
     void backUpFile();
     void restoreFile(List<Product> products);
