@@ -166,7 +166,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
-        Commit.isTransactionUpdated = true;
     }
 
     @Override
@@ -213,7 +212,6 @@ public class ProductServiceImpl implements ProductService {
                     iterator.remove(); // Remove the product using the iterator
                     fileHandler.writeListToFile(productList,FileHandler.TRANSACTION_SOURCE);
                     System.out.println("! Product has been deleted successfully !");
-                    Commit.isTransactionUpdated = true;
                 }
                 isFound = true;
                 break; // Stop iterating once the product is found
@@ -236,7 +234,6 @@ public class ProductServiceImpl implements ProductService {
                 List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
                 fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
                 FileHandler.isCommitted = false;
-                Commit.isTransactionUpdated = false;
             }
         }else {
             System.out.println("> No commit change");
@@ -283,7 +280,6 @@ public class ProductServiceImpl implements ProductService {
                     List<Product> products = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
                     productList.clear();
                     productList.addAll(products);
-                    Commit.isTransactionUpdated = true;
                     FileHandler.isCommitted = true;
                     System.out.println(STR."Restore completed from \{selectedFilePath.getFileName()} to \{FileHandler.TRANSACTION_SOURCE}");
                 } else {
@@ -316,11 +312,17 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public void clearDataInFile(List<Product> products) {
+        Scanner scanner = new Scanner(System.in);
         List<Product> emptyList = new ArrayList<>();
-        fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
-        fileHandler.writeListToFile(emptyList,FileHandler.DATA_SOURCE);
-        products.clear();
-        Commit.isTransactionUpdated = true;
+        String validate = ValidateInput.validateInputString("> Do you want to reset all data ? [Y/n]","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+        if (validate.equalsIgnoreCase("y")){
+            fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
+            fileHandler.writeListToFile(emptyList,FileHandler.DATA_SOURCE);
+            products.clear();
+        }else {
+            System.out.println("> Reset data unsuccessful");
+        }
+
     }
 
     @Override

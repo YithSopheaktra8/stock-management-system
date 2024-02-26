@@ -3,7 +3,7 @@ package view;
 import controller.ProductController;
 import file.FileHandler;
 import modal.Product;
-import utils.Commit;
+import utils.CheckCommit;
 import utils.RenderMenu;
 import utils.ValidateInput;
 
@@ -15,7 +15,18 @@ public class View {
 
     public static void displayToConsole(){
 //        productController.clearData(FileHandler.TRANSACTION_SOURCE);
-        Commit.checkUncommittedChanges();
+        CheckCommit.loadCommitStatus();
+        if(CheckCommit.dataCommitted){
+            productController.commitToDataSource();
+            CheckCommit.dataCommitted = false;
+            CheckCommit.saveCommitStatus();
+        }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // Code to execute before program exits
+            if (FileHandler.isCommitted) {
+                productController.commitToDataSource();
+            }
+        }));
         List<Product> products = productController.loadFromFile();
         Scanner scanner = new Scanner(System.in);
         ProductController productController = new ProductController();
@@ -41,12 +52,10 @@ public class View {
                 case 'a' -> productController.clearData(products);
                 case 'x' -> {
                     System.out.println("Good bye See you again!!");
-                    Commit.closeProgram();
                     System.exit(0);
                 }
                 default -> System.out.println(STR."\{"+".repeat(60)}\n# Please input option from A-F\n\{"+".repeat(60)}");
             }
-            Commit.closeProgram();
         }while (true);
     }
 

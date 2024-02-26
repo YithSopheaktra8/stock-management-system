@@ -1,8 +1,7 @@
 package file;
 
 import modal.Product;
-import utils.Commit;
-import utils.Helper;
+import utils.CheckCommit;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,11 +9,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class FileHandler {
-
     public static final String DATA_SOURCE = "data.txt";
     public static final String TRANSACTION_SOURCE = "transaction.txt";
     public static final String BACK_UP_SOURCE = "backup/";
-    public static final String TEST_RANDOM_RECORD = "random.txt";
     public static Boolean isCommitted = false;
     public void writeListToFile(List<Product> products,String source){
         try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(source)))){
@@ -22,7 +19,8 @@ public class FileHandler {
             allProduct.add(products);
             objectOutputStream.writeObject(allProduct);
             isCommitted = true;
-            Commit.isTransactionUpdated = true;
+            CheckCommit.dataCommitted = true;
+            CheckCommit.saveCommitStatus();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
