@@ -25,11 +25,12 @@ public class View {
             // Code to execute before program exits
             if (FileHandler.isCommitted) {
                 productController.commitToDataSource();
+                CheckCommit.dataCommitted = false;
+                CheckCommit.saveCommitStatus();
             }
         }));
         List<Product> products = productController.loadFromFile();
         Scanner scanner = new Scanner(System.in);
-        ProductController productController = new ProductController();
         char ch;
         do {
             RenderMenu.mainMenu();

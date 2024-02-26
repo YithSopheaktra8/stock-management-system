@@ -82,7 +82,6 @@ public class ProductServiceImpl implements ProductService {
                 case "l" -> currentPage = totalPages;
                 case "f" -> currentPage = 1;
                 case "g" ->{
-                    System.out.print("Enter page number: ");
                     int toPage = ValidateInput.validateInputNumber("> Enter page number : ","! Page must be Number !",scanner);
                     currentPage = Helper.goToSpecificPage(toPage, totalPages);
                 }
@@ -267,13 +266,13 @@ public class ProductServiceImpl implements ProductService {
         try{
             Path backupFilePath = Paths.get("backup");
             try(Stream<Path> fileStream = Files.list(backupFilePath)){
-                System.out.println("List of file : ");
+                System.out.println("> List of file : ");
+                System.out.println("NOTE!! (The latest backup file is on top)");
                 fileStream.forEach((path) -> System.out.println(STR."\{i.getAndIncrement()}. \{path.getFileName()}"));
             }
             // Ask the user to input a number of the file
             Scanner scanner = new Scanner(System.in);
-            System.out.print("> Enter the number of the Backup file to restore: ");
-            int fileNumber = scanner.nextInt();
+            int fileNumber = ValidateInput.validateInputNumber("> Enter the number of the Backup file to restore: ","> Input must be number !",scanner);
 
             // Restore the selected file
             try (Stream<Path> fileStream = Files.list(backupFilePath)) {
@@ -303,14 +302,14 @@ public class ProductServiceImpl implements ProductService {
     public void addRandomRecord(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
         int random = Integer.parseInt(ValidateInput.validateInputString("> Enter random amount : ","! Input must be number ","[0-9]+",scanner));
-        String isSure = ValidateInput.validateInputString(STR."Are you sure to add \{random} product ? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+        String isSure = ValidateInput.validateInputString(STR."Are you sure to add \{random} product to DATA_SOURCE? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
         if(isSure.equalsIgnoreCase("y")){
             for(int i=0; i<random; i++){
                 products.add(new Product("ABC",100.0,10));
             }
         }
         Long start = System.nanoTime();
-        fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
+        fileHandler.writeListToFile(products,FileHandler.DATA_SOURCE);
         Long end = System.nanoTime();
         long elapsedTime = (end - start);
         long milliTime = elapsedTime / 1_000_000;
@@ -322,7 +321,7 @@ public class ProductServiceImpl implements ProductService {
     public void clearDataInFile(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
         List<Product> emptyList = new ArrayList<>();
-        String validate = ValidateInput.validateInputString("> Do you want to reset all data ? [Y/n]","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+        String validate = ValidateInput.validateInputString("> Do you want to reset all data ? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
         if (validate.equalsIgnoreCase("y")){
             fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
             fileHandler.writeListToFile(emptyList,FileHandler.DATA_SOURCE);
@@ -330,7 +329,6 @@ public class ProductServiceImpl implements ProductService {
         }else {
             System.out.println("> Reset data unsuccessful");
         }
-
     }
 
     @Override
