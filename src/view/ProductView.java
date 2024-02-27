@@ -10,11 +10,11 @@ import utils.ValidateInput;
 import java.util.List;
 import java.util.Scanner;
 
-public class View {
+public class ProductView {
     public static final ProductController productController = new ProductController();
+    public static final List<Product> products = productController.loadFromFile();
 
     public static void displayToConsole(){
-//        productController.clearData(FileHandler.TRANSACTION_SOURCE);
         CheckCommit.loadCommitStatus();
         if(CheckCommit.dataCommitted){
             productController.commitToDataSource();
@@ -29,7 +29,7 @@ public class View {
                 CheckCommit.saveCommitStatus();
             }
         }));
-        List<Product> products = productController.loadFromFile();
+
         Scanner scanner = new Scanner(System.in);
         char ch;
         do {

@@ -7,6 +7,7 @@ import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.Table;
 import service.ProductService;
 import utils.*;
+import view.ProductView;
 
 
 import java.nio.file.Files;
@@ -209,7 +210,7 @@ public class ProductServiceImpl implements ProductService {
         Iterator<Product> iterator = productList.iterator();
         while (iterator.hasNext()) {
             Product product = iterator.next();
-            if (product.getName().equalsIgnoreCase(productCode)) {
+            if (product.getCode().equalsIgnoreCase(productCode)) {
                 System.out.println("#".repeat(40));
                 System.out.println(STR."# Product detail of \{product.getCode()}");
                 TableFormatter.showOneProduct(product);
@@ -241,6 +242,8 @@ public class ProductServiceImpl implements ProductService {
                 List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
                 fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
                 FileHandler.isCommitted = false;
+                CheckCommit.dataCommitted = false;
+                CheckCommit.saveCommitStatus();
             }
         }else {
             System.out.println("> No commit change");
@@ -301,22 +304,70 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void addRandomRecord(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
+        int previousData = ProductView.products.size();
         int random = Integer.parseInt(ValidateInput.validateInputString("> Enter random amount : ","! Input must be number ","[0-9]+",scanner));
-        String isSure = ValidateInput.validateInputString(STR."Are you sure to add \{random} product to DATA_SOURCE? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+        String isSure = ValidateInput.validateInputString(STR."Are you sure to add \{random+previousData} product to DATA_SOURCE? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
         if(isSure.equalsIgnoreCase("y")){
             for(int i=0; i<random; i++){
                 products.add(new Product("ABC",100.0,10));
             }
         }
+        // start animation loading
+        Thread loadingThread = getThread();
+
         Long start = System.nanoTime();
         fileHandler.writeListToFile(products,FileHandler.DATA_SOURCE);
         Long end = System.nanoTime();
+
+        // Stop the loading animation
+        loadingThread.interrupt();
+
         long elapsedTime = (end - start);
         long milliTime = elapsedTime / 1_000_000;
         double seconds = (double) elapsedTime / 1_000_000_000;
         double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."# Write \{random} products spend : \{convert} s");
+        System.out.println(STR."\r# Write \{random} products spend : \{convert} s");
     }
+
+    // Create a new thread to display the loading animation
+    private static Thread getThread() {
+        Thread loadingThread = new Thread(() -> {
+            String animation = "|/-\\";
+            int i = 0;
+            while (true) {
+                System.out.print(STR."\rLoading \{animation.charAt(i++ % animation.length())}");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+
+        loadingThread.start(); // Start the loading animation
+        return loadingThread;
+    }
+
+    @Override
+    public List<Product> loadDataFromFile() {
+        System.out.println("Loading from file...");
+        //start animation loading
+        Thread loadingThread = getThread();
+
+        Long start = System.nanoTime();
+        List<Product> productList = fileHandler.readListFile(FileHandler.DATA_SOURCE);
+        Long end = System.nanoTime();
+
+        // Stop the loading animation
+        loadingThread.interrupt();
+        long elapsedTime = (end - start);
+        long milliTime = elapsedTime / 1_000_000;
+        double seconds = (double) elapsedTime / 1_000_000_000;
+        double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+        System.out.println(STR."\n# Load \{productList.size()} products spend : \{convert} s");
+        return productList;
+    }
+
     @Override
     public void clearDataInFile(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
@@ -331,19 +382,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Override
-    public List<Product> loadDataFromFile() {
-        System.out.println("Loading from file...");
-        Long start = System.nanoTime();
-        List<Product> productList = fileHandler.readListFile(FileHandler.DATA_SOURCE);
-        Long end = System.nanoTime();
-        long elapsedTime = (end - start);
-        long milliTime = elapsedTime / 1_000_000;
-        double seconds = (double) elapsedTime / 1_000_000_000;
-        double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."# Load \{productList.size()} products spend : \{convert} s");
-        return productList;
-    }
+
 
 
 }
