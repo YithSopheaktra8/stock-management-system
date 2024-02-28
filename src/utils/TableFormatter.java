@@ -72,4 +72,17 @@ public class TableFormatter {
             table.addCell(STR."Imported Date\{" ".repeat(9)}: \{e.getImported()}");
         System.out.println(table.render());
     }
+
+    public static Table getTable(int currentPage, int totalPages, int totalRecord) {
+        CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.right);
+        CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.left);
+        Table table = new Table(2, BorderStyle.DESIGN_PAPYRUS);
+        table.setColumnWidth(0,55,55);
+        table.setColumnWidth(1,55,55);
+        table.addCell(STR."Page : \{currentPage} of \{totalPages}",cellLeft);
+        table.addCell(STR."Total Record : \{totalRecord}",cellRight);
+        table.addCell("Page Navigation",cellLeft);
+        table.addCell("(F)irst  (P)revious  (G)oto  (N)ext  (L)ast",cellRight);
+        return table;
+    }
 }

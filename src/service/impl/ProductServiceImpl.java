@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
             currentPage = Math.max(1, Math.min(currentPage, totalPages));
             TableFormatter.displayPagination(products,currentPage,pageSize);
             Scanner scanner = new Scanner(System.in);
-            Table table = getTable(currentPage, totalPages, totalRecord);
+            Table table = TableFormatter.getTable(currentPage, totalPages, totalRecord);
             System.out.println(table.render());
             System.out.print("> (B)ack or Navigate page : ");
             choice = scanner.nextLine().toLowerCase();
@@ -88,19 +88,6 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
         }while (!choice.equalsIgnoreCase("b"));
-    }
-
-    private static Table getTable(int currentPage, int totalPages, int totalRecord) {
-        CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.right);
-        CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.left);
-        Table table = new Table(2, BorderStyle.DESIGN_PAPYRUS);
-        table.setColumnWidth(0,55,55);
-        table.setColumnWidth(1,55,55);
-        table.addCell(STR."Page : \{currentPage} of \{totalPages}",cellLeft);
-        table.addCell(STR."Total Record : \{totalRecord}",cellRight);
-        table.addCell("Page Navigation",cellLeft);
-        table.addCell("(F)irst  (P)revious  (G)oto  (N)ext  (L)ast",cellRight);
-        return table;
     }
 
     @Override
@@ -313,7 +300,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         // start animation loading
-        Thread loadingThread = getThread();
+        Thread loadingThread = Helper.getThread();
 
         Long start = System.nanoTime();
         fileHandler.writeListToFile(products,FileHandler.DATA_SOURCE);
@@ -329,30 +316,13 @@ public class ProductServiceImpl implements ProductService {
         System.out.println(STR."\r# Write \{random} products spend : \{convert} s");
     }
 
-    // Create a new thread to display the loading animation
-    private static Thread getThread() {
-        Thread loadingThread = new Thread(() -> {
-            String animation = "|/-\\";
-            int i = 0;
-            while (true) {
-                System.out.print(STR."\rLoading \{animation.charAt(i++ % animation.length())}");
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    break;
-                }
-            }
-        });
 
-        loadingThread.start(); // Start the loading animation
-        return loadingThread;
-    }
 
     @Override
     public List<Product> loadDataFromFile() {
         System.out.println("Loading from file...");
         //start animation loading
-        Thread loadingThread = getThread();
+        Thread loadingThread = Helper.getThread();
 
         Long start = System.nanoTime();
         List<Product> productList = fileHandler.readListFile(FileHandler.DATA_SOURCE);
