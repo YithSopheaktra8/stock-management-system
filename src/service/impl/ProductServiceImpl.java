@@ -2,8 +2,6 @@ package service.impl;
 
 import file.FileHandler;
 import modal.Product;
-import org.nocrala.tools.texttablefmt.BorderStyle;
-import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.Table;
 import service.ProductService;
 import utils.*;
@@ -99,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void editProduct(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter code to update : ");
+        System.out.print("Enter product code to update : ");
         String code = scanner.nextLine();
         for (Product product : products){
             if (product.getCode().equals(code)){
@@ -107,63 +105,18 @@ public class ProductServiceImpl implements ProductService {
                 RenderMenu.updateMenu();
                 String userInput = ValidateInput.validateInputString("> Option [1-5] : ","! Please Input from 1-5","[1-5]+",scanner);
                 switch (userInput) {
-                    case "1" -> {
-                        System.out.print("Enter NAME : ");
-                        String name = scanner.nextLine();
-                        System.out.print("Enter PRICE : ");
-                        double price = Double.parseDouble(scanner.nextLine());
-                        Integer quantity = ValidateInput.validateInputNumber("Enter product Quantity : ","! Product quantity cannot be decimal number",scanner);
-                        Product product1 = new Product(product.getCode(),name,price,quantity,product.getImported());
-                        System.out.println("#".repeat(40));
-                        System.out.println(STR."# New Product detail of \{product.getCode()}");
-                        TableFormatter.showOneProduct(product1);
-                        String isSure = ValidateInput.validateInputString("Are you sure to update? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
-                        if (isSure.equalsIgnoreCase("y")){
-                            product.setCode(product1.getCode());
-                            product.setName(product1.getName());
-                            product.setPrice(product1.getPrice());
-                            product.setQuantity(product1.getQuantity());
-                            product.setImported(product1.getImported());
-                        }
-                    }
-                    case "2" -> {
-                        String newName = ValidateInput.validateInputString("> Please Enter new Product name : ", "! Please Input Alphabet and Number only", "[0-9a-zA-Z\\s]+", scanner);
-                        Product product1 = new Product(product.getCode(),newName, product.getPrice(), product.getQuantity(), product.getImported());
-                        System.out.println("#".repeat(40));
-                        System.out.println(STR."# New Product detail of \{product.getCode()}");
-                        TableFormatter.showOneProduct(product1);
-                        String isSure = ValidateInput.validateInputString("Are you sure to update? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
-                        if (isSure.equalsIgnoreCase("y"))
-                            product.setName(product1.getName());
-
-                    }
-                    case "3" -> {
-                        double newPrice = Double.parseDouble(ValidateInput.validateInputString("> Please Enter new Product price : ", "! Please Input Decimal only", "[0-9]+", scanner));
-                        Product product1 = new Product(product.getCode(),product.getName(), newPrice, product.getQuantity(), product.getImported());
-                        System.out.println("#".repeat(40));
-                        System.out.println(STR."# New Product detail of \{product.getCode()}");
-                        TableFormatter.showOneProduct(product1);
-                        String isSure = ValidateInput.validateInputString("Are you sure to update? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
-                        if (isSure.equalsIgnoreCase("y"))
-                            product.setPrice(product1.getPrice());
-                    }
-                    case "4" -> {
-                        int newQty = Integer.parseInt(ValidateInput.validateInputString("> Please Enter new Product price : ", "! Please Input Decimal only", "[0-9]+", scanner));
-                        Product product1 = new Product(product.getCode(),product.getName(), product.getPrice(), newQty, product.getImported());
-                        System.out.println("#".repeat(40));
-                        System.out.println(STR."# New Product detail of \{product.getCode()}");
-                        TableFormatter.showOneProduct(product1);
-                        String isSure = ValidateInput.validateInputString("Are you sure to update? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
-                        if (isSure.equalsIgnoreCase("y"))
-                            product.setQuantity(product1.getQuantity());
+                    case "1" -> Helper.editAllProductInfo(product, scanner);
+                    case "2" -> Helper.editProductName(product, scanner);
+                    case "3" -> Helper.editProductPrice(product, scanner);
+                    case "4" -> Helper.editQuantity(product, scanner);
+                    case "5" -> {
+                        return;
                     }
                 }
-
             }
         }
         fileHandler.writeListToFile(products,FileHandler.TRANSACTION_SOURCE);
     }
-
     @Override
     public void searchProductByName(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
@@ -183,7 +136,6 @@ public class ProductServiceImpl implements ProductService {
         }else {
             TableFormatter.displayTable(searchList);
         }
-
     }
 
     @Override
@@ -202,7 +154,6 @@ public class ProductServiceImpl implements ProductService {
                 System.out.println(STR."# Product detail of \{product.getCode()}");
                 TableFormatter.showOneProduct(product);
                 isSure = ValidateInput.validateInputString("Are you sure to delete? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
-
                 if (isSure.equalsIgnoreCase("y")) {
                     iterator.remove(); // Remove the product using the iterator
                     fileHandler.writeListToFile(productList,FileHandler.TRANSACTION_SOURCE);
@@ -212,7 +163,6 @@ public class ProductServiceImpl implements ProductService {
                 break; // Stop iterating once the product is found
             }
         }
-
         if (!isFound) {
             System.out.println("! Product not found.");
         }
@@ -251,7 +201,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
     @Override
-    public  void restoreFile(List<Product> productList) {
+    public void restoreFile(List<Product> productList) {
         AtomicInteger i = new AtomicInteger(1);
         try{
             Path backupFilePath = Paths.get("backup");
