@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
 
     private static final FileHandler fileHandler = new FileHandler();
     public static int setRow = 0;
-    public static int pageSize = 3;
+    public static int pageSize = 4;
 
 
     @Override
@@ -97,10 +97,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void editProduct(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print(STR."\{Helper.textAccentBlue}Enter product code to update : \{Helper.resetColor}");
-        String code = scanner.nextLine();
+        String productCode = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}Enter product code (CSTAD- followed by numbers) : \{Helper.resetColor}",STR."\{Helper.textOrange}! Must be follow by instruction!\{Helper.resetColor}","^CSTAD-\\d+$",scanner);
         for (Product product : products){
-            if (product.getCode().equals(code)){
+            if (product.getCode().equals(productCode)){
                 TableFormatter.showOneProduct(product);
                 RenderMenu.updateMenu();
                 String userInput = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Option [1-5] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please Input from 1-5\{Helper.resetColor}","[1-5]+",scanner);
@@ -173,13 +172,14 @@ public class ProductServiceImpl implements ProductService {
         if(FileHandler.isCommitted){
             System.out.println("#".repeat(40));
             System.out.println(STR."\{Helper.textOrange}You have uncommitted transaction.\{Helper.resetColor}");
-            String isSure = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Do you want to save or lose data? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]",scanner);
+            String isSure = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Do you want to save or lose data? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]+$",scanner);
             if(isSure.equalsIgnoreCase("y")){
                 List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
                 fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
                 FileHandler.isCommitted = false;
                 CheckCommit.dataCommitted = false;
                 CheckCommit.saveCommitStatus();
+                System.out.println(STR."\{Helper.textGreen}> Commit completed\{Helper.resetColor}");
             }
         }else {
             System.out.println(STR."\{Helper.textGreen}> No commit change\{Helper.resetColor}");
@@ -192,7 +192,8 @@ public class ProductServiceImpl implements ProductService {
             Files.createDirectories(Paths.get(FileHandler.BACK_UP_SOURCE));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
             String timestamp = dateFormat.format(new Date());
-            String backupFileName = STR."\{FileHandler.BACK_UP_SOURCE}backup_\{timestamp}.txt";
+            String filename = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}Enter backup filename : \{Helper.resetColor}",STR."\{Helper.textOrange}! Filename cannot be empty !\{Helper.resetColor}","[a-zA-Z0-9_ ]+",new Scanner(System.in));
+            String backupFileName = STR."\{FileHandler.BACK_UP_SOURCE}backup_\{filename}\{timestamp}.txt";
             Files.copy(Paths.get("data.txt"), Paths.get(backupFileName), StandardCopyOption.REPLACE_EXISTING);
             System.out.println(STR."\{Helper.textGreen}Backup completed. backup filename : \{Helper.resetColor} \{Helper.textAccentBlue}\{backupFileName} \{Helper.resetColor}");
         }catch (Exception e){
@@ -201,6 +202,7 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public void restoreFile(List<Product> productList) {
+        Scanner scanner = new Scanner(System.in);
         AtomicInteger i = new AtomicInteger(1);
         try{
             Path backupFilePath = Paths.get("backup");
@@ -210,7 +212,6 @@ public class ProductServiceImpl implements ProductService {
                 fileStream.forEach((path) -> System.out.println(STR."\{i.getAndIncrement()}. \{path.getFileName()}"));
             }
             // Ask the user to input a number of the file
-            Scanner scanner = new Scanner(System.in);
             int fileNumber = ValidateInput.validateInputNumber(STR."\{Helper.textAccentBlue}> Enter the number of the Backup file to restore: \{Helper.resetColor}",STR."\{Helper.textOrange}> Input must be number !\{Helper.resetColor}",scanner);
 
             // Restore the selected file
@@ -227,6 +228,8 @@ public class ProductServiceImpl implements ProductService {
                     productList.clear();
                     productList.addAll(products);
                     FileHandler.isCommitted = true;
+                    CheckCommit.dataCommitted = true;
+                    CheckCommit.saveCommitStatus();
                     System.out.println(STR."\{Helper.textGreen}Restore completed from \{Helper.resetColor}\{Helper.textAccentBlue}\{selectedFilePath.getFileName()} to \{FileHandler.TRANSACTION_SOURCE} \{Helper.resetColor}");
                 } else {
                     System.out.println(STR."\{Helper.resetColor}Invalid file number.\{Helper.resetColor}");

@@ -21,7 +21,7 @@ public class RenderMenu {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
         System.out.println(STR."\{Helper.textGreen}# Create a new product\{Helper.resetColor}");
-        String name = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter Product name : \{Helper.resetColor}",STR."\{Helper.textOrange}! Product name can not be special character !\{Helper.resetColor}","^[a-zA-Z0-9]+",scanner);
+        String name = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter Product name : \{Helper.resetColor}",STR."\{Helper.textOrange}! Product name can not be special character !\{Helper.resetColor}","^[a-zA-Z0-9 ]+$",scanner);
         double price = Double.parseDouble(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter Product price : \{Helper.resetColor}",STR."\{Helper.textOrange}! Product price must be number !\{Helper.resetColor}","[+]?\\d*\\.?\\d+$",scanner));
         int quantity = Integer.parseInt(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter Product quantity : \{Helper.resetColor}",STR."\{Helper.textOrange}! Product quantity must be number !\{Helper.resetColor}","[0-9]+",scanner));
         return new Product(name,price,quantity);

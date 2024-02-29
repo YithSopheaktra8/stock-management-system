@@ -37,7 +37,7 @@ public class ValidateInput {
     public static Character validateInputChar(String message, String error, String stringPattern , Scanner input){
         while (true){
             System.out.print(message);
-            String choice = input.nextLine();
+            String choice = String.valueOf(input.nextLine().charAt(0));
             Pattern pattern = Pattern.compile(stringPattern);
             Matcher matcher = pattern.matcher(choice);
             if(matcher.matches())

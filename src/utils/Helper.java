@@ -68,7 +68,7 @@ public class Helper {
         }
     }
     public static void editProductPrice(Product product, Scanner scanner) {
-        double newPrice = Double.parseDouble(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Please Enter new Product price : \{Helper.resetColor}", STR."\{Helper.textOrange}! Please Input Decimal only\{Helper.resetColor}", "[0-9]+", scanner));
+        double newPrice = Double.parseDouble(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Please Enter new Product price : \{Helper.resetColor}", STR."\{Helper.textOrange}! Please Input Decimal only\{Helper.resetColor}", "^-?\\d+(\\.\\d+)?$", scanner));
         Product product1 = new Product(product.getCode(), product.getName(), newPrice, product.getQuantity(), product.getImported());
         System.out.println("#".repeat(40));
         System.out.println(STR."\{Helper.textGreen}# New Product detail of \{product.getCode()}\{Helper.resetColor}");
