@@ -18,11 +18,7 @@ public class TableFormatter {
         table.setColumnWidth(2, 20, 20);
         table.setColumnWidth(3, 20, 20);
         table.setColumnWidth(4, 20, 20);
-        table.addCell(STR."\{Helper.textAccentBlue}CODE\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}NAME\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}UNIT_PRICE\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}QTY\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}IMPORTED_AT\{Helper.resetColor}", cellCenter);
+        headerDisplayTable(cellCenter, table);
         int totalRecords = products.size();
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
         currentPage = Math.max(1, Math.min(currentPage, totalPages));
@@ -39,6 +35,14 @@ public class TableFormatter {
         System.out.println(table.render());
     }
 
+    public static void headerDisplayTable(CellStyle cellCenter, Table table) {
+        table.addCell(STR."\{Helper.textAccentBlue}CODE\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}NAME\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}UNIT_PRICE\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}QTY\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}IMPORTED_AT\{Helper.resetColor}", cellCenter);
+    }
+
     public static void displayTable(List<Product> products) {
         CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
         Table table = new Table(5, BorderStyle.UNICODE_DOUBLE_BOX_WIDE);
@@ -47,11 +51,7 @@ public class TableFormatter {
         table.setColumnWidth(2,20,30);
         table.setColumnWidth(3,20,30);
         table.setColumnWidth(4,20,30);
-        table.addCell(STR."\{Helper.textAccentBlue}CODE\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}NAME\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}UNIT_PRICE\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}QTY\{Helper.resetColor}", cellCenter);
-        table.addCell(STR."\{Helper.textAccentBlue}IMPORTED_AT\{Helper.resetColor}", cellCenter);
+        headerDisplayTable(cellCenter, table);
 
         for(Product e : products) {
             table.addCell(e.getCode(),cellCenter);
