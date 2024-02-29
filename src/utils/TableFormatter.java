@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TableFormatter {
     public static void displayPagination(List<Product> products,int currentPage, int pageSize) {
-        CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
+        CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.CENTER);
         Table table = new Table(5, BorderStyle.UNICODE_DOUBLE_BOX_WIDE);
         table.setColumnWidth(0, 20, 20);
         table.setColumnWidth(1, 20, 20);
@@ -44,7 +44,7 @@ public class TableFormatter {
     }
 
     public static void displayTable(List<Product> products) {
-        CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
+        CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.CENTER);
         Table table = new Table(5, BorderStyle.UNICODE_DOUBLE_BOX_WIDE);
         table.setColumnWidth(0,20,30);
         table.setColumnWidth(1,20,30);
@@ -74,8 +74,8 @@ public class TableFormatter {
     }
 
     public static Table getTable(int currentPage, int totalPages, int totalRecord) {
-        CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.right);
-        CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.left);
+        CellStyle cellRight = new CellStyle(CellStyle.HorizontalAlign.RIGHT);
+        CellStyle cellLeft = new CellStyle(CellStyle.HorizontalAlign.LEFT);
         Table table = new Table(2, BorderStyle.DESIGN_PAPYRUS);
         table.setColumnWidth(0,55,55);
         table.setColumnWidth(1,55,55);

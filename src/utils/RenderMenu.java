@@ -50,7 +50,7 @@ public class RenderMenu {
         String menu = "Disp(l)ay | Rando(m) | (W)rite | (R)ead | (E)dit | (D)elete | (S)earch ";
         String menu1 = "| Set r(o)w | (C)ommit | Bac(k) up | Res(t)ore | (H)elp  | Cle(a)r | E(x)it";
         Table table = new Table(1, BorderStyle.UNICODE_BOX_DOUBLE_BORDER_WIDE, ShownBorders.SURROUND);
-        CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
+        CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.CENTER);
         table.setColumnWidth(0,100,100);
         table.addCell(menu,cellCenter);
         table.addCell(menu1,cellCenter);
