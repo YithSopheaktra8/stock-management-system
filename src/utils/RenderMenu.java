@@ -47,13 +47,17 @@ public class RenderMenu {
         System.out.println(tableHelp.render());
     }
     public static void mainMenu(){
+        System.out.println(STR."\{Helper.textAccentBlue}#\{Helper.resetColor}".repeat(125));
         String menu = "Disp(l)ay | Rando(m) | (W)rite | (R)ead | (E)dit | (D)elete | (S)earch ";
         String menu1 = "| Set r(o)w | (C)ommit | Bac(k) up | Res(t)ore | (H)elp  | Cle(a)r | E(x)it";
         Table table = new Table(1, BorderStyle.UNICODE_BOX_DOUBLE_BORDER_WIDE, ShownBorders.SURROUND);
         CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
-        table.setColumnWidth(0,100,100);
+        table.setColumnWidth(0,120,120);
         table.addCell(menu,cellCenter);
         table.addCell(menu1,cellCenter);
         System.out.println(table.render());
+        System.out.println(STR."\{Helper.textAccentBlue}#\{Helper.resetColor}".repeat(125));
+
+
     }
 }

@@ -20,12 +20,12 @@ public class Helper {
     }
 
     // Create a new thread to display the loading animation
-    public static Thread getThread() {
+    public static Thread getThread(String text,String direction) {
         Thread loadingThread = new Thread(() -> {
             String animation = "|/-\\";
             int i = 0;
             while (true) {
-                System.out.print(STR."\{Helper.textOrange}\rLoading product from DATA_SOURCE  \{animation.charAt(i++ % animation.length())}\{Helper.resetColor}");
+                System.out.print(STR."\{Helper.textOrange}\r\{text} product \{direction} DATA_SOURCE  \{animation.charAt(i++ % animation.length())}\{Helper.resetColor}");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {

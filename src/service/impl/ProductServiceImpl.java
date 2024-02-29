@@ -173,7 +173,7 @@ public class ProductServiceImpl implements ProductService {
         if(FileHandler.isCommitted){
             System.out.println("#".repeat(40));
             System.out.println(STR."\{Helper.textOrange}You have uncommitted transaction.\{Helper.resetColor}");
-            String isSure = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Do you want to save or lose data? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]+$",scanner);
+            String isSure = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Do you want to save or lose data? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]",scanner);
             if(isSure.equalsIgnoreCase("y")){
                 List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
                 fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
@@ -249,7 +249,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         // start animation loading
-        Thread loadingThread = Helper.getThread();
+        Thread loadingThread = Helper.getThread("Writing","to");
 
         Long start = System.nanoTime();
         fileHandler.writeListToFile(products,FileHandler.DATA_SOURCE);
@@ -257,12 +257,13 @@ public class ProductServiceImpl implements ProductService {
 
         // Stop the loading animation
         loadingThread.interrupt();
+        FileHandler.isCommitted = false;
+        CheckCommit.dataCommitted = false;
+        CheckCommit.saveCommitStatus();
 
         long elapsedTime = (end - start);
-        long milliTime = elapsedTime / 1_000_000;
-        double seconds = (double) elapsedTime / 1_000_000_000;
-        double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."\{Helper.textGreen}\r# Write \{random} products spend : \{convert} s \{Helper.resetColor}");
+        double seconds = (double) elapsedTime / 1_000_000_000; // Convert nanoseconds to seconds
+        System.out.println(STR."\{Helper.textGreen}\r# Write \{random} products spend : \{seconds} s \{Helper.resetColor}");
     }
 
 
@@ -270,7 +271,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> loadDataFromFile() {
         //start animation loading
-        Thread loadingThread = Helper.getThread();
+        Thread loadingThread = Helper.getThread("Loading","from");
 
         Long start = System.nanoTime();
         List<Product> productList = fileHandler.readListFile(FileHandler.DATA_SOURCE);
@@ -279,10 +280,8 @@ public class ProductServiceImpl implements ProductService {
         // Stop the loading animation
         loadingThread.interrupt();
         long elapsedTime = (end - start);
-        long milliTime = elapsedTime / 1_000_000;
-        double seconds = (double) elapsedTime / 1_000_000_000;
-        double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."\{Helper.textGreen}\n# Load \{productList.size()} products spend : \{convert} s\{Helper.resetColor}");
+        double seconds = (double) elapsedTime / 1_000_000_000; // Convert nanoseconds to seconds
+        System.out.println(STR."\{Helper.textGreen}\n# Load \{productList.size()} products spend : \{seconds} s\{Helper.resetColor}");
         return productList;
     }
 
@@ -295,6 +294,7 @@ public class ProductServiceImpl implements ProductService {
             fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
             fileHandler.writeListToFile(emptyList,FileHandler.DATA_SOURCE);
             products.clear();
+            System.out.println(STR."\{Helper.textGreen}> Reset data successfully\{Helper.resetColor}");
         }else {
             System.out.println(STR."\{Helper.textOrange}> Reset data unsuccessful\{Helper.resetColor}");
         }
