@@ -10,20 +10,20 @@ import java.util.Scanner;
 
 public class RenderMenu {
     public static void updateMenu(){
-        System.out.println("# What do you want to update?");
-        System.out.println("1. All");
-        System.out.println("2. NAME");
-        System.out.println("3. UNIT PRICE");
-        System.out.println("4. QTY");
-        System.out.println("5. Back to Menu");
+        System.out.println(STR."\{Helper.textGreen}# What do you want to update?\{Helper.resetColor}");
+        System.out.println(STR."\{Helper.textAccentBlue}1. All\{Helper.resetColor}");
+        System.out.println(STR."\{Helper.textAccentBlue}2. NAME\{Helper.resetColor}");
+        System.out.println(STR."\{Helper.textAccentBlue}3. UNIT PRICE\{Helper.resetColor}");
+        System.out.println(STR."\{Helper.textAccentBlue}4. QTY\{Helper.resetColor}");
+        System.out.println(STR."\{Helper.textAccentBlue}5. Back to Menu\{Helper.resetColor}");
     }
     public static Product insertProduct(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
-        System.out.println("# Create a new product");
-        String name = ValidateInput.validateInputString("> Enter Product name : ","! Product name can not be special character !","^[a-zA-Z0-9]+",scanner);
-        double price = Double.parseDouble(ValidateInput.validateInputString("> Enter Product price : ","! Product price must be number !","[+]?\\d*\\.?\\d+$",scanner));
-        int quantity = Integer.parseInt(ValidateInput.validateInputString("> Enter Product quantity : ","! Product quantity must be number !","[0-9]+",scanner));
+        System.out.println(STR."\{Helper.textGreen}# Create a new product\{Helper.resetColor}");
+        String name = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter Product name : \{Helper.resetColor}",STR."\{Helper.textOrange}! Product name can not be special character !\{Helper.resetColor}","^[a-zA-Z0-9]+",scanner);
+        double price = Double.parseDouble(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter Product price : \{Helper.resetColor}",STR."\{Helper.textOrange}! Product price must be number !\{Helper.resetColor}","[+]?\\d*\\.?\\d+$",scanner));
+        int quantity = Integer.parseInt(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter Product quantity : \{Helper.resetColor}",STR."\{Helper.textOrange}! Product quantity must be number !\{Helper.resetColor}","[0-9]+",scanner));
         return new Product(name,price,quantity);
     }
     public static void helpMenu(){

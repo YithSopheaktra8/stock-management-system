@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     public void readSingleObject(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
-        String productCode = ValidateInput.validateInputString("Enter product code (CSTAD- followed by numbers) : ","! Must be follow by instruction!","^CSTAD-\\d+$",scanner);
+        String productCode = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}Enter product code (CSTAD- followed by numbers) : \{Helper.resetColor}",STR."\{Helper.textOrange}! Must be follow by instruction!\{Helper.resetColor}","^CSTAD-\\d+$",scanner);
         boolean isFound = false;
         for (Product product : productList){
             if(product.getCode().toLowerCase().contains(productCode.toLowerCase())){
@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         if(!isFound){
-            System.out.println("! Product Not Found !");
+            System.out.println(STR."\{Helper.textOrange}! Product Not Found !\{Helper.resetColor}");
         }
     }
 
@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
             Scanner scanner = new Scanner(System.in);
             Table table = TableFormatter.getTable(currentPage, totalPages, totalRecord);
             System.out.println(table.render());
-            System.out.print("> (B)ack or Navigate page : ");
+            System.out.print(STR."\{Helper.textAccentBlue}> (B)ack or Navigate page : \{Helper.resetColor}");
             choice = scanner.nextLine().toLowerCase();
             switch (choice){
                 case "n" -> {
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
                 case "l" -> currentPage = totalPages;
                 case "f" -> currentPage = 1;
                 case "g" ->{
-                    int toPage = ValidateInput.validateInputNumber("> Enter page number : ","! Page must be Number !",scanner);
+                    int toPage = ValidateInput.validateInputNumber(STR."\{Helper.textAccentBlue}> Enter page number : \{Helper.resetColor}",STR."\{Helper.textOrange}! Page must be Number !\{Helper.resetColor}",scanner);
                     currentPage = Helper.goToSpecificPage(toPage, totalPages);
                 }
             }
@@ -91,19 +91,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void setRow() {
         Scanner scanner = new Scanner(System.in);
-        ProductServiceImpl.setRow = ValidateInput.validateInputNumber("> Set row to display in table : ","! Row must be number !",scanner);
+        ProductServiceImpl.setRow = ValidateInput.validateInputNumber(STR."\{Helper.textAccentBlue}> Set row to display in table : \{Helper.resetColor}",STR."\{Helper.textOrange}! Row must be number !\{Helper.resetColor}",scanner);
         pageSize = ProductServiceImpl.setRow;
     }
     @Override
     public void editProduct(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter product code to update : ");
+        System.out.print(STR."\{Helper.textAccentBlue}Enter product code to update : \{Helper.resetColor}");
         String code = scanner.nextLine();
         for (Product product : products){
             if (product.getCode().equals(code)){
                 TableFormatter.showOneProduct(product);
                 RenderMenu.updateMenu();
-                String userInput = ValidateInput.validateInputString("> Option [1-5] : ","! Please Input from 1-5","[1-5]+",scanner);
+                String userInput = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Option [1-5] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please Input from 1-5\{Helper.resetColor}","[1-5]+",scanner);
                 switch (userInput) {
                     case "1" -> Helper.editAllProductInfo(product, scanner);
                     case "2" -> Helper.editProductName(product, scanner);
@@ -121,8 +121,8 @@ public class ProductServiceImpl implements ProductService {
     public void searchProductByName(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
-        System.out.println("# Search product by name");
-        String productName = ValidateInput.validateInputString("Enter product name : ","! Must be Alphabet and Number only!","[0-9a-zA-Z\\s]+",scanner);
+        System.out.println(STR."\{Helper.textAccentBlue}# Search product by name");
+        String productName = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}Enter product name : \{Helper.resetColor}",STR."\{Helper.textOrange}! Must be Alphabet and Number only!\{Helper.resetColor}","[0-9a-zA-Z\\s]+",scanner);
         List<Product> searchList = new ArrayList<>();
         boolean isFound = false;
         for (Product product : productList){
@@ -132,18 +132,17 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         if(!isFound){
-            System.out.println("! Product Not Found !");
+            System.out.println(STR."\{Helper.textOrange}! Product Not Found !\{Helper.resetColor}");
         }else {
             TableFormatter.displayTable(searchList);
         }
     }
-
     @Override
     public void deleteProductByCode(List<Product> productList) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("#".repeat(40));
-        System.out.println("# Delete a product");
-        String productCode = ValidateInput.validateInputString("Enter product code (CSTAD- followed by numbers) : ","! Must be follow by instruction!","^CSTAD-\\d+$",scanner);
+        System.out.println(STR."\{Helper.textAccentBlue}# Delete a product\{Helper.resetColor}");
+        String productCode = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}Enter product code (CSTAD- followed by numbers) : \{Helper.resetColor}",STR."\{Helper.textOrange}! Must be follow by instruction!\{Helper.resetColor}","^CSTAD-\\d+$",scanner);
         String isSure;
         boolean isFound = false;
         Iterator<Product> iterator = productList.iterator();
@@ -151,20 +150,20 @@ public class ProductServiceImpl implements ProductService {
             Product product = iterator.next();
             if (product.getCode().equalsIgnoreCase(productCode)) {
                 System.out.println("#".repeat(40));
-                System.out.println(STR."# Product detail of \{product.getCode()}");
+                System.out.println(STR."\{Helper.textAccentBlue}# Product detail of \{Helper.resetColor}\{product.getCode()}");
                 TableFormatter.showOneProduct(product);
-                isSure = ValidateInput.validateInputString("Are you sure to delete? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+                isSure = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}Are you sure to delete? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]+$",scanner);
                 if (isSure.equalsIgnoreCase("y")) {
                     iterator.remove(); // Remove the product using the iterator
                     fileHandler.writeListToFile(productList,FileHandler.TRANSACTION_SOURCE);
-                    System.out.println("! Product has been deleted successfully !");
+                    System.out.println(STR."\{Helper.textGreen}! Product has been deleted successfully !\{Helper.resetColor}");
                 }
                 isFound = true;
                 break; // Stop iterating once the product is found
             }
         }
         if (!isFound) {
-            System.out.println("! Product not found.");
+            System.out.println(STR."\{Helper.textOrange}! Product not found.\{Helper.resetColor}");
         }
     }
 
@@ -173,8 +172,8 @@ public class ProductServiceImpl implements ProductService {
         Scanner scanner = new Scanner(System.in);
         if(FileHandler.isCommitted){
             System.out.println("#".repeat(40));
-            System.out.println("You have uncommitted transaction.");
-            String isSure = ValidateInput.validateInputString("> Do you want to save or lose data? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+            System.out.println(STR."\{Helper.textOrange}You have uncommitted transaction.\{Helper.resetColor}");
+            String isSure = ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Do you want to save or lose data? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]+$",scanner);
             if(isSure.equalsIgnoreCase("y")){
                 List<Product> productList = fileHandler.readListFile(FileHandler.TRANSACTION_SOURCE);
                 fileHandler.writeListToFile(productList,FileHandler.DATA_SOURCE);
@@ -183,7 +182,7 @@ public class ProductServiceImpl implements ProductService {
                 CheckCommit.saveCommitStatus();
             }
         }else {
-            System.out.println("> No commit change");
+            System.out.println(STR."\{Helper.textGreen}> No commit change\{Helper.resetColor}");
         }
     }
 
@@ -195,7 +194,7 @@ public class ProductServiceImpl implements ProductService {
             String timestamp = dateFormat.format(new Date());
             String backupFileName = STR."\{FileHandler.BACK_UP_SOURCE}backup_\{timestamp}.txt";
             Files.copy(Paths.get("data.txt"), Paths.get(backupFileName), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println(STR."Backup completed. backup filename : \{backupFileName}");
+            System.out.println(STR."\{Helper.textGreen}Backup completed. backup filename : \{Helper.resetColor} \{Helper.textAccentBlue}\{backupFileName} \{Helper.resetColor}");
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -206,13 +205,13 @@ public class ProductServiceImpl implements ProductService {
         try{
             Path backupFilePath = Paths.get("backup");
             try(Stream<Path> fileStream = Files.list(backupFilePath)){
-                System.out.println("> List of file : ");
-                System.out.println("NOTE!! (The latest backup file is on top)");
+                System.out.println(STR."\{Helper.textAccentBlue}> List of file : \{Helper.resetColor}");
+                System.out.println(STR."\{Helper.textOrange}NOTE!! (The latest backup file is on top)\{Helper.resetColor}");
                 fileStream.forEach((path) -> System.out.println(STR."\{i.getAndIncrement()}. \{path.getFileName()}"));
             }
             // Ask the user to input a number of the file
             Scanner scanner = new Scanner(System.in);
-            int fileNumber = ValidateInput.validateInputNumber("> Enter the number of the Backup file to restore: ","> Input must be number !",scanner);
+            int fileNumber = ValidateInput.validateInputNumber(STR."\{Helper.textAccentBlue}> Enter the number of the Backup file to restore: \{Helper.resetColor}",STR."\{Helper.textOrange}> Input must be number !\{Helper.resetColor}",scanner);
 
             // Restore the selected file
             try (Stream<Path> fileStream = Files.list(backupFilePath)) {
@@ -228,9 +227,9 @@ public class ProductServiceImpl implements ProductService {
                     productList.clear();
                     productList.addAll(products);
                     FileHandler.isCommitted = true;
-                    System.out.println(STR."Restore completed from \{selectedFilePath.getFileName()} to \{FileHandler.TRANSACTION_SOURCE}");
+                    System.out.println(STR."\{Helper.textGreen}Restore completed from \{Helper.resetColor}\{Helper.textAccentBlue}\{selectedFilePath.getFileName()} to \{FileHandler.TRANSACTION_SOURCE} \{Helper.resetColor}");
                 } else {
-                    System.out.println("Invalid file number.");
+                    System.out.println(STR."\{Helper.resetColor}Invalid file number.\{Helper.resetColor}");
                 }
             }
         }catch (Exception e){
@@ -242,11 +241,11 @@ public class ProductServiceImpl implements ProductService {
     public void addRandomRecord(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
         int previousData = ProductView.products.size();
-        int random = Integer.parseInt(ValidateInput.validateInputString("> Enter random amount : ","! Input must be number ","[0-9]+",scanner));
-        String isSure = ValidateInput.validateInputString(STR."Are you sure to add \{random+previousData} product to DATA_SOURCE? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+        int random = Integer.parseInt(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter random amount : \{Helper.resetColor}",STR."\{Helper.textOrange}! Input must be number \{Helper.resetColor}","[0-9]+",scanner));
+        String isSure = ValidateInput.validateInputString(STR."\{Helper.textOrange}Are you sure to add \{random+previousData} product to DATA_SOURCE? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]+$",scanner);
         if(isSure.equalsIgnoreCase("y")){
             for(int i=0; i<random; i++){
-                products.add(new Product("ABC",100.0,10));
+                products.add(new Product("PRODUCT123",100.0,10));
             }
         }
         // start animation loading
@@ -263,14 +262,13 @@ public class ProductServiceImpl implements ProductService {
         long milliTime = elapsedTime / 1_000_000;
         double seconds = (double) elapsedTime / 1_000_000_000;
         double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."\r# Write \{random} products spend : \{convert} s");
+        System.out.println(STR."\{Helper.textGreen}\r# Write \{random} products spend : \{convert} s \{Helper.resetColor}");
     }
 
 
 
     @Override
     public List<Product> loadDataFromFile() {
-        System.out.println("Loading from file...");
         //start animation loading
         Thread loadingThread = Helper.getThread();
 
@@ -284,7 +282,7 @@ public class ProductServiceImpl implements ProductService {
         long milliTime = elapsedTime / 1_000_000;
         double seconds = (double) elapsedTime / 1_000_000_000;
         double convert = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
-        System.out.println(STR."\n# Load \{productList.size()} products spend : \{convert} s");
+        System.out.println(STR."\{Helper.textGreen}\n# Load \{productList.size()} products spend : \{convert} s\{Helper.resetColor}");
         return productList;
     }
 
@@ -292,13 +290,13 @@ public class ProductServiceImpl implements ProductService {
     public void clearDataInFile(List<Product> products) {
         Scanner scanner = new Scanner(System.in);
         List<Product> emptyList = new ArrayList<>();
-        String validate = ValidateInput.validateInputString("> Do you want to reset all data ? [Y/n] : ","! Please input y or n (y = yes),(n = no)","^[yYnN]+$",scanner);
+        String validate = ValidateInput.validateInputString(STR."\{Helper.textOrange}> Do you want to reset all data ? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]+$",scanner);
         if (validate.equalsIgnoreCase("y")){
             fileHandler.writeListToFile(emptyList,FileHandler.TRANSACTION_SOURCE);
             fileHandler.writeListToFile(emptyList,FileHandler.DATA_SOURCE);
             products.clear();
         }else {
-            System.out.println("> Reset data unsuccessful");
+            System.out.println(STR."\{Helper.textOrange}> Reset data unsuccessful\{Helper.resetColor}");
         }
     }
 

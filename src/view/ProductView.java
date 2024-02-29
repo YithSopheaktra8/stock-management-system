@@ -4,6 +4,7 @@ import controller.ProductController;
 import file.FileHandler;
 import modal.Product;
 import utils.CheckCommit;
+import utils.Helper;
 import utils.RenderMenu;
 import utils.ValidateInput;
 
@@ -34,8 +35,8 @@ public class ProductView {
         char ch;
         do {
             RenderMenu.mainMenu();
-            ch = ValidateInput.validateInputChar("> Choose option : ",
-                    STR."\{"+".repeat(60)}\n# Option must be alphabet\n\{"+".repeat(60)}",
+            ch = ValidateInput.validateInputChar(STR."\{Helper.textAccentBlue}> Choose option : \{Helper.resetColor}",
+                    STR."\{"+".repeat(60)}\n\{Helper.textOrange}# Option must be alphabet \{Helper.resetColor}\n\{"+".repeat(60)}",
                     "[a-zA-Z]+",
                     scanner);
             switch (ch){
@@ -56,7 +57,7 @@ public class ProductView {
                     System.out.println("Good bye See you again!!");
                     System.exit(0);
                 }
-                default -> System.out.println(STR."\{"+".repeat(60)}\n# Please input option from A-F\n\{"+".repeat(60)}");
+                default -> System.out.println(STR."\{"+".repeat(60)}\n\{Helper.textOrange}# Please input option from A-F\{Helper.resetColor}\n\{"+".repeat(60)}");
             }
         }while (true);
     }

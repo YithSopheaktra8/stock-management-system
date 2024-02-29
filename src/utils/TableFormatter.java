@@ -18,11 +18,11 @@ public class TableFormatter {
         table.setColumnWidth(2, 20, 20);
         table.setColumnWidth(3, 20, 20);
         table.setColumnWidth(4, 20, 20);
-        table.addCell("CODE", cellCenter);
-        table.addCell("NAME", cellCenter);
-        table.addCell("UNIT_PRICE", cellCenter);
-        table.addCell("QTY", cellCenter);
-        table.addCell("IMPORTED_AT", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}CODE\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}NAME\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}UNIT_PRICE\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}QTY\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}IMPORTED_AT\{Helper.resetColor}", cellCenter);
         int totalRecords = products.size();
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
         currentPage = Math.max(1, Math.min(currentPage, totalPages));
@@ -47,11 +47,11 @@ public class TableFormatter {
         table.setColumnWidth(2,20,30);
         table.setColumnWidth(3,20,30);
         table.setColumnWidth(4,20,30);
-        table.addCell("CODE",cellCenter);
-        table.addCell("NAME",cellCenter);
-        table.addCell("UNIT_PRICE",cellCenter);
-        table.addCell("QTY",cellCenter);
-        table.addCell("IMPORTED_AT",cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}CODE\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}NAME\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}UNIT_PRICE\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}QTY\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}IMPORTED_AT\{Helper.resetColor}", cellCenter);
 
         for(Product e : products) {
             table.addCell(e.getCode(),cellCenter);
@@ -65,11 +65,11 @@ public class TableFormatter {
     }
     public static void showOneProduct(Product e) {
         Table table = new Table(1, BorderStyle.UNICODE_BOX_DOUBLE_BORDER_WIDE, ShownBorders.SURROUND);
-            table.addCell(STR."CODE\{" ".repeat(18)}: \{e.getCode()}");
-            table.addCell(STR."Name\{" ".repeat(18)}: \{e.getName()}");
-            table.addCell(STR."Unit Price\{" ".repeat(12)}: \{e.getPrice()}");
-            table.addCell(STR."Qty\{" ".repeat(19)}: \{e.getQuantity()}");
-            table.addCell(STR."Imported Date\{" ".repeat(9)}: \{e.getImported()}");
+            table.addCell(STR."\{Helper.textAccentBlue}CODE\{" ".repeat(18)}: \{e.getCode()}");
+            table.addCell(STR."\{Helper.textAccentBlue}Name\{" ".repeat(18)}: \{e.getName()}");
+            table.addCell(STR."\{Helper.textAccentBlue}Unit Price\{" ".repeat(12)}: \{e.getPrice()}");
+            table.addCell(STR."\{Helper.textAccentBlue}Qty\{" ".repeat(19)}: \{e.getQuantity()}");
+            table.addCell(STR."\{Helper.textAccentBlue}Imported Date\{" ".repeat(9)}: \{e.getImported()}");
         System.out.println(table.render());
     }
 
@@ -79,10 +79,10 @@ public class TableFormatter {
         Table table = new Table(2, BorderStyle.DESIGN_PAPYRUS);
         table.setColumnWidth(0,55,55);
         table.setColumnWidth(1,55,55);
-        table.addCell(STR."Page : \{currentPage} of \{totalPages}",cellLeft);
-        table.addCell(STR."Total Record : \{totalRecord}",cellRight);
-        table.addCell("Page Navigation",cellLeft);
-        table.addCell("(F)irst  (P)revious  (G)oto  (N)ext  (L)ast",cellRight);
+        table.addCell(STR."\{Helper.textGreen}Page : \{Helper.resetColor}\{currentPage} of \{totalPages}",cellLeft);
+        table.addCell(STR."\{Helper.textGreen}Total Record : \{Helper.resetColor}\{totalRecord}",cellRight);
+        table.addCell(STR."\{Helper.textGreen}Page Navigation\{Helper.resetColor}",cellLeft);
+        table.addCell(STR."\{Helper.textGreen}(F)irst  (P)revious  (G)oto  (N)ext  (L)ast\{Helper.resetColor}",cellRight);
         return table;
     }
 }

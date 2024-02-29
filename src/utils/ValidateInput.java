@@ -15,7 +15,7 @@ public class ValidateInput {
                 if(!(Integer.parseInt(choice) == 0))
                     return Integer.parseInt(choice);
                 else
-                    System.out.println("Can not be ZERO");
+                    System.out.println(STR."\{Helper.textOrange}Can not be ZERO\{Helper.resetColor}");
             }
             else
                 System.out.println(error);
