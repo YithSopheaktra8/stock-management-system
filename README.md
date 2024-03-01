@@ -74,5 +74,13 @@ _Below is an example of how you can install and setting up your app.
    
 3. Run the project from main method
 
+### Library to download 
+
+1. Kryo library for derialization and serialization
+   <br><a href="https://jar-download.com/artifacts/com.esotericsoftware/kryo/4.0.0/source-code">Kryo Library</a>
+2. Lombok library for using annotation and other shorthand code
+   <br><a href="https://projectlombok.org/download">Lombok Library</a>
+3. text table formatter library for formatting the table
+   <br><a href="https://sourceforge.net/projects/texttablefmt/">Text Table Formatter Library</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

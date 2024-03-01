@@ -81,7 +81,7 @@ public class Helper {
     }
 
     public static void editQuantity(Product product, Scanner scanner) {
-        int newQty = Integer.parseInt(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Please Enter new Product price : \{Helper.resetColor}", STR."\{Helper.textOrange}! Please Input Decimal only\{Helper.resetColor}", "[0-9]+", scanner));
+        int newQty = Integer.parseInt(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Please Enter new Product quantity : \{Helper.resetColor}", STR."\{Helper.textOrange}! Please Input Decimal only\{Helper.resetColor}", "[0-9]+", scanner));
         Product product1 = new Product(product.getCode(), product.getName(), product.getPrice(), newQty, product.getImported());
         System.out.println("#".repeat(40));
         System.out.println(STR."\{Helper.textGreen}# New Product detail of \{product.getCode()}\{Helper.resetColor}");
