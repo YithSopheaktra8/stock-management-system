@@ -1,5 +1,7 @@
 package modal;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import utils.Helper;
 
@@ -12,7 +14,6 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @ToString
-@Builder
 public class Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 6529685098267757690L;
@@ -27,7 +28,13 @@ public class Product implements Serializable {
         this.price = price;
         this.quantity = quantity;
     }
-    public Product(String code, String name, double price, int quantity, String imported){
+
+    @JsonCreator
+    public Product(@JsonProperty("code") String code,
+                   @JsonProperty("name") String name,
+                   @JsonProperty("price") double price,
+                   @JsonProperty("quantity") int quantity,
+                   @JsonProperty("imported") String imported){
         this.code = code;
         this.name = name;
         this.price = price;
