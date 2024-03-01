@@ -246,16 +246,17 @@ public class ProductServiceImpl implements ProductService {
         int previousData = ProductView.products.size();
         int random = Integer.parseInt(ValidateInput.validateInputString(STR."\{Helper.textAccentBlue}> Enter random amount : \{Helper.resetColor}",STR."\{Helper.textOrange}! Input must be number \{Helper.resetColor}","[0-9]+",scanner));
         String isSure = ValidateInput.validateInputString(STR."\{Helper.textOrange}Are you sure to add \{random+previousData} product to DATA_SOURCE? [Y/n] : \{Helper.resetColor}",STR."\{Helper.textOrange}! Please input y or n (y = yes),(n = no)\{Helper.resetColor}","^[yYnN]+$",scanner);
+        List<Product> newProducts = new ArrayList<>(products);
         if(isSure.equalsIgnoreCase("y")){
             for(int i=0; i<random; i++){
-                products.add(new Product("PRODUCT123",100.0,10));
+                newProducts.add(new Product("PRODUCT123",100.0,10));
             }
         }
         // start animation loading
         Thread loadingThread = Helper.getThread("Writing","to");
 
         Long start = System.nanoTime();
-        fileHandler.writeListToFile(products,FileHandler.DATA_SOURCE);
+        fileHandler.writeListToFile(newProducts,FileHandler.DATA_SOURCE);
         Long end = System.nanoTime();
 
         // Stop the loading animation

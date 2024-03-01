@@ -14,10 +14,10 @@ public class TableFormatter {
         CellStyle cellCenter = new CellStyle(CellStyle.HorizontalAlign.center);
         Table table = new Table(5, BorderStyle.UNICODE_DOUBLE_BOX_WIDE);
         table.setColumnWidth(0, 20, 20);
-        table.setColumnWidth(1, 20, 20);
-        table.setColumnWidth(2, 20, 20);
-        table.setColumnWidth(3, 20, 20);
-        table.setColumnWidth(4, 20, 20);
+        table.setColumnWidth(1, 20, 50);
+        table.setColumnWidth(2, 20, 50);
+        table.setColumnWidth(3, 20, 50);
+        table.setColumnWidth(4, 20, 50);
         headerDisplayTable(cellCenter, table);
         int totalRecords = products.size();
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
@@ -26,17 +26,17 @@ public class TableFormatter {
         int endIndex = Math.min(startIndex + pageSize, totalRecords);
         for (int i = startIndex; i < endIndex; i++) {
             Product e = products.get(i);
-            table.addCell(e.getCode(), cellCenter);
-            table.addCell(e.getName(), cellCenter);
-            table.addCell(e.getPrice().toString(), cellCenter);
-            table.addCell(e.getQuantity().toString(), cellCenter);
-            table.addCell(e.getImported().toString(), cellCenter);
+            table.addCell(e.getCode(),cellCenter);
+            table.addCell(e.getName(),cellCenter);
+            table.addCell(e.getPrice()+"",cellCenter);
+            table.addCell(e.getQuantity()+"",cellCenter);
+            table.addCell(e.getImported(),cellCenter);
         }
         System.out.println(table.render());
     }
 
     public static void headerDisplayTable(CellStyle cellCenter, Table table) {
-        table.addCell(STR."\{Helper.textAccentBlue}CODE\{Helper.resetColor}", cellCenter);
+        table.addCell(STR."\{Helper.textAccentBlue}CODE\{Helper.resetColor}");
         table.addCell(STR."\{Helper.textAccentBlue}NAME\{Helper.resetColor}", cellCenter);
         table.addCell(STR."\{Helper.textAccentBlue}UNIT_PRICE\{Helper.resetColor}", cellCenter);
         table.addCell(STR."\{Helper.textAccentBlue}QTY\{Helper.resetColor}", cellCenter);
@@ -56,9 +56,9 @@ public class TableFormatter {
         for(Product e : products) {
             table.addCell(e.getCode(),cellCenter);
             table.addCell(e.getName(),cellCenter);
-            table.addCell(e.getPrice().toString(),cellCenter);
-            table.addCell(e.getQuantity().toString(),cellCenter);
-            table.addCell(e.getImported().toString(),cellCenter);
+            table.addCell(e.getPrice()+"",cellCenter);
+            table.addCell(e.getQuantity()+"",cellCenter);
+            table.addCell(e.getImported(),cellCenter);
 
         }
         System.out.println(table.render());

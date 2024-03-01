@@ -37,13 +37,22 @@ public class ValidateInput {
     public static Character validateInputChar(String message, String error, String stringPattern , Scanner input){
         while (true){
             System.out.print(message);
-            String choice = String.valueOf(input.nextLine().charAt(0));
+            String line = input.nextLine();
+
+            if (line.isEmpty()) {
+                System.out.println("Error: Please enter a valid character.");
+                continue;
+            }
+
+            char firstChar = line.charAt(0);
             Pattern pattern = Pattern.compile(stringPattern);
-            Matcher matcher = pattern.matcher(choice);
-            if(matcher.matches())
-                return Character.toLowerCase(choice.charAt(0));
-            else
+            Matcher matcher = pattern.matcher(String.valueOf(firstChar));
+
+            if (matcher.matches()) {
+                return Character.toLowerCase(firstChar);
+            } else {
                 System.out.println(error);
+            }
         }
     }
 }

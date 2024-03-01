@@ -8,6 +8,7 @@ import utils.Helper;
 import utils.RenderMenu;
 import utils.ValidateInput;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -22,6 +23,7 @@ public class ProductView {
             productController.commitToDataSource();
             CheckCommit.dataCommitted = false;
             CheckCommit.saveCommitStatus();
+            FileHandler.isCommitted = false;
 
         }
         Scanner scanner = new Scanner(System.in);
@@ -62,7 +64,6 @@ public class ProductView {
                     System.out.println("Good bye See you again!!");
                 }
                 default -> System.out.println(STR."\{"+".repeat(60)}\n\{Helper.textOrange}# Please input base on option above\{Helper.resetColor}\n\{"+".repeat(60)}");
-
             }
         }while (true);
     }
